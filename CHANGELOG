@@ -1,8 +1,23 @@
+Unreleased
+  - !!! DEWI goes into multiple repositories and packages
+  - use only 'protected' members with single leading underscore ('_')
+  - commands: argparse.Namespace object's 'protected', custom
+    members end with '_' instead of leading '_',
+  - add sortphotos command to sort a bunch of photos into directories
+    named based on shoot date
+  - add http command to stream /dev/urandom, mainly for testing purposes
+  - add primes command to calculate the first N primes
+  - add packt command to download books and codes from packtpub
+    note, that it's broken as of now as the web UI is modified already
+  - keep commands only
+  - start using semantic versioning
+
+
 1.5
   - MainApplication: --debug implies --log-level debug
     default log level: info
   - images/filedb: add count() to count entries in photo_file_info table
-  - images related commands: use exiftool-5.26 as MacPorts updated it
+  - images related dewi_commands.commands: use exiftool-5.26 as MacPorts updated it
   - safe_delete_images: handle Exceptions at unlink(), mainly PermissionErrors
   - add further log_*() calls into dewi.rrdtool & realtime_sync
 
@@ -12,11 +27,11 @@
     .zip files
   - if a command is mistyped or non-existing, print at most 6 similar command
     names, or list all of them
-  - dewi.images.filedb: add rollback() method to FileDatabase
-  - dewi.core.context: Context got 'commands' and 'command_registry'
-    properties, and always contains the corresponding 'commands' and
+  - dewi_commands.common.images.filedb: add rollback() method to FileDatabase
+  - dewi_core.context: Context got 'dewi_commands.commands' and 'command_registry'
+    properties, and always contains the corresponding 'dewi_commands.commands' and
     'commandregistry' fields
-  - introduce dewi.core.logger module, log_debug, log_info, etc. can be used
+  - introduce dewi_core.logger module, log_debug, log_info, etc. can be used
 
 1.3
   - fix setup.py
@@ -40,7 +55,7 @@
   - config/node: __setattr__ checks whether key is already in the node
   - config/config: add _top_level_unsafe_set() used by subclasses, for self[key] = value
   - logparser: add ISO8601Parser.to_datetime, reuse it in to_timestamp
-  - dewi.core.application: add list and list-all commands, w/o args 'list' is used
+  - dewi_core.application: add list and list-all dewi_commands.commands, w/o args 'list' is used
 
 1.0
   - It can be marked as stable.
@@ -53,19 +68,19 @@
   - module for lutheran lithurgical feasts
   - main app: --wait to wait before exiting (useful on Windows)
   - main app: --debug / --print-backtrace options
-  - dewi.module_framework: add module support for any command (see README.rst)
-     * another Config() as dewi.config.Config() class
+  - module_framework: add module support for any command (see README.rst)
+     * another Config() as dewi_core.config.Config() class
      * Messages() class
-  - dewi.logparser: parse logs in a directory + modules (see README.rst)
+  - dewi_logparsers.logparser: parse logs in a directory + modules (see README.rst)
   - dewi.utils.network: MAC to vendor mapping
   - dewi.utils.dictionaries: customized behaviour of dicts
   - dewi.utils.render.py: add Jinja2 TemplateRenderer
-  - dewi.realtime_sync + filesync (treesync):
+  - dewi_commands.common.realtime_sync + filesync (treesync):
     sync a directory tree (source code) to a local or remote directory with rules
   - dewi.utils.process: find_binary/which to search for executable in PATH
   - dewi.utils.kayako_rest: Request + Host classes to communicate with Kayako's REST API
-  - dewi.config.node: Node is a typesafe dict for dewi.config module
-  - dewi.images + 4 commands to sort photos from multiple locations:
+  - dewi_core.config.node: Node is a typesafe dict for dewi_core.config module
+  - dewi_commands.common.images + 4 dewi_commands.commands to sort photos from multiple locations:
       * collect-images -> to an SQLite DB
       * select-images: select useful entries from collected images
       * dedup-images: copy unique images into a new location (original -> new mapping is in DB)
@@ -74,7 +89,7 @@
 
 0.1
   - Initial release
-  - Supports / provide plugins and commands
+  - Supports / provide plugins and dewi_commands.commands
   - Added edit command, to easily open file with vim at a specific line,
     the argument can be copied directly from anything which have similar
     output as grep -nH ... | cut -f-2 -d:

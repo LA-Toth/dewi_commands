@@ -1,5 +1,6 @@
-nose
-pycodestyle
+dewi_core
+dewi_modules_framework
+dewi_logparsers
+dewi_utils
+selenium
 pyyaml
-Jinja2
-watchdog
