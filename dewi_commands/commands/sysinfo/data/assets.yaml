@@ -1,0 +1,12 @@
+bootstrap:
+  dir: bootstrap/dist
+font-awesome:
+  dirs:
+    - font-awesome/css
+    - font-awesome/fonts
+jquery:
+  dir: jquery/dist
+popperjs:
+  dir: popper.js/dist/umd
+tooltipjs:
+  dir: tooltip.js/dist/umd
