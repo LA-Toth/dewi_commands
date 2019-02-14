@@ -1,6 +1,6 @@
 # Copyright 2017-2019 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
-
+import multiprocessing
 import os.path
 
 from dewi_logparsers.syslog import ISO8601Parser
@@ -39,6 +39,7 @@ class GraphModule(BaseModule):
                         GraphInterval(GraphIntervalType.MONTH),
                         GraphInterval(GraphIntervalType.YEAR),
                     ],
+                    parallel_run_count=max(1, multiprocessing.cpu_count() - 1)
                     )
         r.run()
         self._root_node.graphs = r.graph_result
