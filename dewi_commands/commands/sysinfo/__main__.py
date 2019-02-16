@@ -3,15 +3,11 @@
 
 import sys
 
-from dewi_core.application import MainApplication
-from dewi_core.loader.loader import PluginLoader
+from dewi_core.application import SinglePluginApplication
 
 
 def main():
-    loader = PluginLoader()
-    app = MainApplication(loader, 'dewi-sysinfo',
-                          fallback_to_plugin_name='dewi_commands.commands.sysinfo.SysInfoPlugin',
-                          disable_plugins_from_cmdline=True)
+    app = SinglePluginApplication('dewi-sysinfo', 'dewi_commands.commands.sysinfo.SysInfoPlugin')
     app.run(sys.argv[1:])
 
 
