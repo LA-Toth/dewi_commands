@@ -12,7 +12,7 @@ from dewi_core.commandplugin import CommandPlugin
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
-    server_version = "Milan/1.0"
+    server_version = "DEWI/1.0"
     c_1K = 1024
     c_1M = c_1K ** 2
     c_10M = 10 * c_1M
