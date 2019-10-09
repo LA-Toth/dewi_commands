@@ -24,6 +24,7 @@ class WorktimeCommand(Command):
     def _add_parser(self, parsers, subcommand: typing.Type[Subcommand]):
         cmd = subcommand()
         _parser = parsers.add_parser(cmd.name, help=cmd.description, aliases=cmd.aliases)
+        cmd.register_arguments(_parser)
         _parser.set_defaults(func=cmd.run, instance=cmd)
         _parser.add_argument('filename', nargs='?',
                              help='Filename or ~/WT.{ext} or ~/WORKTIME.{ext}'.format(ext=subcommand.ext))

@@ -7,7 +7,7 @@ import sys
 import typing
 
 from dewi_core.command import Command
-from .worktime_manager import WorktimeImporter, WorktimeManager, WorktimeProcessor
+from .worktime_main import WorktimeImporter, WorktimeManager, WorktimeProcessor
 
 
 class Subcommand(Command):
