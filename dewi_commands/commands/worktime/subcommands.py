@@ -23,6 +23,8 @@ class Subcommand(Command):
             print(f'{args.filename} does not exist. Please specify a valid file', file=sys.stderr)
             return False
 
+        args.filename = os.path.abspath(args.filename)
+
         return True
 
 

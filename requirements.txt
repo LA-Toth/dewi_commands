@@ -2,6 +2,6 @@ dewi_core
 dewi_modules_framework
 dewi_logparsers
 dewi_utils
-orator
 selenium
+sqlalchemy
 pyyaml

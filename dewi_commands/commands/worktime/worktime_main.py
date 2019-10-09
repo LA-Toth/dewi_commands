@@ -6,7 +6,10 @@ import re
 import time
 import typing
 
-from dewi_commands.commands.worktime.database import create_database_manager
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+from dewi_commands.commands.worktime.models.base import Base
 from dewi_commands.commands.worktime.models.worktime_entry import WorktimeEntry
 from dewi_core.logger import log_debug
 
@@ -18,7 +21,8 @@ class Entry:
 
         self.intervals_: typing.List[typing.Tuple[datetime.datetime, typing.Optional[datetime.datetime]]] = None
 
-    def intervals_as_datetimes(self, *, use_current_time=False):
+    def intervals_as_datetimes(self, *, use_current_time=False) -> typing.List[
+        typing.Tuple[datetime.datetime, typing.Optional[datetime.datetime]]]:
         if self.intervals_ is None:
             self.intervals_ = []
 
@@ -133,24 +137,40 @@ class WorktimeProcessor:
         print(f' Overtime     :   {"YES" if diff_from_required < 0 else "no"}')
 
 
-class WorktimeImporter:
-    def __init__(self, filename: str, source_filename: str):
+class DatabaseUser:
+    def __init__(self, filename: str):
         self.filename = filename
+        self.engine = create_engine('sqlite+pysqlite:///' + self.filename)
+        self.session = sessionmaker(bind=self.engine)()
+
+    def create_entry(self, event_at: datetime.datetime, *, is_login: bool) -> WorktimeEntry:
+        e = WorktimeEntry()
+        e.event_at = event_at
+        e.is_login = is_login
+        e.init_fields()
+        return e
+
+    def create_login_entry(self, event_at: datetime.datetime) -> WorktimeEntry:
+        return self.create_entry(event_at, is_login=True)
+
+    def create_logout_entry(self, event_at: datetime.datetime) -> WorktimeEntry:
+        return self.create_entry(event_at, is_login=False)
+
+
+class WorktimeImporter(DatabaseUser):
+    def __init__(self, filename: str, source_filename: str):
+        super().__init__(filename)
         self.source_filename = source_filename
-        self.db = create_database_manager(self.filename)
 
     def run(self):
+        Base.metadata.create_all(self.engine)
         for entry in self._entries():
             for (login, logout) in entry.intervals_as_datetimes():
-                e = WorktimeEntry()
-                e.entry_timestamp = login
-                e.is_login = True
-                e.save()
+                self.session.add(self.create_login_entry(login))
                 if logout is not None:
-                    e = WorktimeEntry()
-                    e.entry_timestamp = logout
-                    e.is_login = False
-                    e.save()
+                    self.session.add(self.create_login_entry(logout))
+
+        self.session.commit()
 
     def _entries(self):
         def create_tuple(s: str) -> typing.Tuple[str, str]:
@@ -168,19 +188,14 @@ class WorktimeImporter:
                 )
 
 
-class WorktimeManager:
+class WorktimeManager(DatabaseUser):
     def __init__(self, filename: str):
-        self.filename = filename
-        self.db = create_database_manager(self.filename)
+        super().__init__(filename)
 
     def login(self):
-        e = WorktimeEntry()
-        e.entry_timestamp = datetime.datetime.now()
-        e.is_login = True
-        e.save()
+        self.session.add(self.create_login_entry(datetime.datetime.now()))
+        self.session.commit()
 
     def logout(self):
-        e = WorktimeEntry()
-        e.entry_timestamp = datetime.datetime.now()
-        e.is_login = False
-        e.save()
+        self.session.add(self.create_logout_entry(datetime.datetime.now()))
+        self.session.commit()
