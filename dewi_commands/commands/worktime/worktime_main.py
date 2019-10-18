@@ -60,9 +60,22 @@ class WorktimeProcessor:
 
         sum_seconds = 0
         required_seconds = 0
+
+        last_month = (None, None)
+
         for entry in self._entries():
-            required_seconds += 8 * 3600
             (date, seconds, hours, minutes, diff_from_required) = self.sum_of_day(entry)
+
+            current_month = (date.tm_year, date.tm_mon)
+            if last_month != current_month:
+                if last_month[0] is not None and not self.today_only:
+                    self._stat(sum_seconds, required_seconds, required_seconds - sum_seconds, last=False)
+
+                sum_seconds = 0
+                required_seconds = 0
+                last_month = current_month
+
+            required_seconds += 8 * 3600
             sum_seconds += seconds
 
             if not self.today_only or (date.tm_year, date.tm_mon, date.tm_mday) == today:
@@ -127,7 +140,7 @@ class WorktimeProcessor:
         print(time.strftime('%Y-%m-%d', date) +
               f': {hours:02d}:{minutes:02d}  {diff_str:9s}: {diff_from_required // 60 :02d} min')
 
-    def _stat(self, seconds: int, required_seconds: int, diff_from_required: int):
+    def _stat(self, seconds: int, required_seconds: int, diff_from_required: int, *, last: bool = True):
         def _print(title: str, s: int):
             prefix = '-' if s < 0 else ' '
             s = abs(s)
@@ -140,6 +153,9 @@ class WorktimeProcessor:
         _print('Required', required_seconds)
         _print('Difference', diff_from_required)
         print(f' Overtime     :   {"YES" if diff_from_required < 0 else "no"}')
+
+        if not last:
+            print('------\n')
 
 
 class DatabaseUser:
