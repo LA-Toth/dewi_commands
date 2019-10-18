@@ -50,10 +50,14 @@ class Entry:
 
 
 class WorktimeProcessor:
-    def __init__(self, filename: str):
+    def __init__(self, filename: str, *, today_only: bool = False):
         self.filename = filename
+        self.today_only = today_only
 
     def run(self):
+        today = datetime.date.today()
+        today = (today.year, today.month, today.day)
+
         sum_seconds = 0
         required_seconds = 0
         for entry in self._entries():
@@ -61,7 +65,8 @@ class WorktimeProcessor:
             (date, seconds, hours, minutes, diff_from_required) = self.sum_of_day(entry)
             sum_seconds += seconds
 
-            self._daily_stat(date, seconds, hours, minutes, required_seconds - sum_seconds)
+            if not self.today_only or (date.tm_year, date.tm_mon, date.tm_mday) == today:
+                self._daily_stat(date, seconds, hours, minutes, required_seconds - sum_seconds)
 
         self._stat(sum_seconds, required_seconds, required_seconds - sum_seconds)
 

@@ -73,8 +73,12 @@ class Print(Subcommand):
     description = 'Prints the current worktime entries and stat'
     ext = 'txt'
 
+    def register_arguments(self, parser: argparse.ArgumentParser) -> None:
+        parser.add_argument('-t', '--today', action='store_true', default=False,
+                            help='Print stat of today only and the summary')
+
     def run(self, args: argparse.Namespace) -> typing.Optional[int]:
         if not self._validate_filename(args):
             return 1
 
-        return WorktimeProcessor(args.filename).run()
+        return WorktimeProcessor(args.filename, today_only=args.today).run()
