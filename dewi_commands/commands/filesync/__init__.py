@@ -64,7 +64,8 @@ class FileSyncCommand(Command):
     def _register_sync_entries(self, parser: argparse.ArgumentParser):
         parser.add_argument(
             '-e', '--entry', action='append', required=True,
-            help='A file sync entry describing what to synchronize to where with additional details.'
+            help='A file sync entry describing what to synchronize in format'
+                 ' source;target;permissions;owner;group;flags'
         )
 
         parser.add_argument(
