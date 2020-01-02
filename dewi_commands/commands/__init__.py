@@ -33,6 +33,7 @@ class CommandsPlugin(Plugin):
             'dewi_commands.commands.ImageHandlerCommandsPlugin',
             'dewi_commands.commands.edit.edit.EditPlugin',
             'dewi_commands.commands.filesync.FileSyncPlugin',
+            'dewi_commands.commands.jsonformatter.JSonFormatterPlugin',
             'dewi_commands.commands.license.LicensePlugin',
             'dewi_commands.commands.lithurgical.LithurgicalPlugin',
             'dewi_commands.commands.split_zorp_log.SplitZorpLogPlugin',
