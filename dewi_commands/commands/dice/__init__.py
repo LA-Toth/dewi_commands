@@ -16,7 +16,7 @@ class DiceCommand(Command):
     def register_arguments(self, parser: argparse.ArgumentParser):
         parser.add_argument(
             'dice', default='d6', nargs='*',
-            help='The dice (or die) to roll, based on DnD: [count]d{4,6,8,10,12,20,%}, default=d6')
+            help='The dice (or die) to roll, based on DnD: [count]d{4,6,8,10,12,20,%%}, default=d6')
 
     def run(self, args: argparse.Namespace):
         dice = Die()
