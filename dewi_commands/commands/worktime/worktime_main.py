@@ -153,6 +153,9 @@ class WorktimeProcessor:
         _print('Required', required_seconds)
         _print('Difference', diff_from_required)
         print(f' Overtime     :   {"YES" if diff_from_required < 0 else "no"}')
+        if diff_from_required > 0:
+            estimated_end = datetime.datetime.now() + datetime.timedelta(seconds=diff_from_required)
+            print(f' Estimated end:   {estimated_end.strftime("%Y-%m-%d %T")}')
 
         if not last:
             print('------\n')
