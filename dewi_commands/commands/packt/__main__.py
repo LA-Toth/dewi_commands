@@ -1,16 +1,15 @@
-# Copyright 2019-2020 Laszlo Attila Toth
+# Copyright 2020 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import sys
 
-from dewi_commands.commands.worktime import WorktimeCommand
+from dewi_commands.commands.packt import PacktCommand
 from dewi_core.application import SingleCommandApplication
 
 
 def main():
-    app = SingleCommandApplication('dewi-worktime', WorktimeCommand)
+    app = SingleCommandApplication('dewi-packt', PacktCommand)
     app.run(sys.argv[1:])
 
-
 if __name__ == '__main__':
-    main()
+        main()
