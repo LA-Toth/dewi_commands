@@ -4,4 +4,5 @@ dewi_logparsers
 dewi_utils
 selenium
 sqlalchemy
+threadpool
 pyyaml
