@@ -1,3 +1,6 @@
+2.1.1
+  - setup.py: add missing dependencies
+
 2.1.0
   - add 'sysinfo' command to examine current system and create report
   - http command: change server name to DEWI
