@@ -70,6 +70,8 @@ setup(
         'dewi_utils>=2.1.0',
         'dewi_realtime_sync>=2.0.0',
         'selenium',
+        'sqlalchemy',
+        'threadpool',
         'pyyaml',
     ]
 )
