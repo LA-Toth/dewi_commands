@@ -184,12 +184,12 @@ class ProcessInputToFilter:
 
         return parser
 
-    def _register_parser(self, subparsers, name: str, aliases: collections.Iterable, func: callable, help: str):
+    def _register_parser(self, subparsers, name: str, aliases: typing.Iterable[str], func: callable, help: str):
         parser = subparsers.add_parser(name, aliases=aliases, help=help)
         parser.set_defaults(func=func)
         return parser
 
-    def _register_parser_with_default_help(self, subparsers, name: str, aliases: collections.Iterable, help: str):
+    def _register_parser_with_default_help(self, subparsers, name: str, aliases: typing.Iterable[str], help: str):
         parser = subparsers.add_parser(name, aliases=aliases, help=help)
         parser.set_defaults(func=parser.print_help)
         return parser
