@@ -34,6 +34,7 @@ class CommandsPlugin(Plugin):
             'dewi_commands.commands.ImageHandlerCommandsPlugin',
             'dewi_commands.commands.dice.DicePlugin',
             'dewi_commands.commands.edit.edit.EditPlugin',
+            'dewi_commands.commands.fetchcovidhu.FetchCovidHuPlugin',
             'dewi_commands.commands.filesync.FileSyncPlugin',
             'dewi_commands.commands.find.FindPlugin',
             'dewi_commands.commands.jsonformatter.JSonFormatterPlugin',

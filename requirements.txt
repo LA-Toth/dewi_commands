@@ -6,3 +6,6 @@ selenium
 sqlalchemy
 threadpool
 pyyaml
+
+setuptools
+lxml
