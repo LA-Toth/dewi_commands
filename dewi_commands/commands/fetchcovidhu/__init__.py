@@ -14,12 +14,14 @@ class FetchCovidHuCommand(Command):
     description = 'Fetches the koronavirus.gov.hu site into CSV/JPG'
 
     def register_arguments(self, parser: argparse.ArgumentParser):
+        parser.add_argument('-a', '--historical', '--archived', action='store_true',
+                            dest='historical', help='Fetch all historical data (missing from directory)')
         parser.add_argument(
             'directory', nargs=1,
             help='The output base directory - a subdirectory from localtime will be created')
 
     def run(self, args: argparse.Namespace):
-        return Fetcher(args.directory[0]).fetch()
+        return Fetcher(args.directory[0], historical_mode=args.historical).fetch()
 
 
 FetchCovidHuPlugin = CommandPlugin.create(FetchCovidHuCommand)
