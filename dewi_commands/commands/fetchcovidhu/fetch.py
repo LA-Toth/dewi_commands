@@ -64,7 +64,7 @@ class _Fetcher:
 
     def __init__(self, directory: str, timestamp: typing.Optional[datetime.datetime] = None, *,
                  historical_mode: bool = False,
-                 url: typing.Optional[str]=None):
+                 url: typing.Optional[str] = None):
         self.directory = directory
         self.timestamp = timestamp or datetime.datetime.now()
         self.historical_mode = historical_mode
@@ -73,13 +73,13 @@ class _Fetcher:
         self.map_file = 'terkep.jpg'
         self.deceased_file = 'deceased.json'
         self.deceased_file_template = 'Elhunytak {last}-{first}.html'
-        self.url = url if  self.historical_mode and url else self.BASE_URL
+        self.url = url if self.historical_mode and url else self.BASE_URL
 
         if not self.url:
             raise ValueError('The url parameter is required for historical mode in _Fetcher')
 
     def fetch(self):
-        #return
+        # return
         self._prepare_directory()
         self._fetch_stats()
         self._fetch_images()
@@ -100,7 +100,7 @@ class _Fetcher:
         ), 'info.json')
 
     def _fetch_stats(self):
-        #if os.path.exists()
+        # if os.path.exists()
         raw_page = self._fetch_to_file(f'{self.BASE_URL}/', self.main_html_file).decode('UTF-8')
         self._gen_stats(raw_page)
 
@@ -175,7 +175,7 @@ class _Fetcher:
 
         for row in rows:
             index, gender, age, deseases = row[0].text, row[1].text, row[2].text, row[3].text
-            data = dict(index=int(index.strip()), gender=self._map_gender(gender), age=int(age.strip()))
+            data = dict(index=int(index.strip()), gender=self._map_gender(gender.strip()), age=int(age.strip()))
 
             data['deseases'] = [x.strip() for x in deseases.split(',')]
 
@@ -232,7 +232,7 @@ class _HistoricalFetcher:
 
     def __init__(self, directory: str, timestamp: datetime.datetime):
         self.directory = directory
-        self.timestamp=timestamp
+        self.timestamp = timestamp
         self.archived_url_directory = os.path.join(self.directory, 'archived-urls')
         self.archived_directory = os.path.join(self.directory, 'archived')
         self.url_fetcher = UrlFetcher(limit=50, sleep_time=3)
@@ -257,13 +257,12 @@ class _HistoricalFetcher:
 
     def _fetch_archives(self):
         for fetch_date in self._each_day():
-            date=fetch_date.strftime('%Y-%m-%d')
+            date = fetch_date.strftime('%Y-%m-%d')
             log_debug('Fetching/Checking historical details', dict(date=date))
             filename = os.path.join(self.archived_url_directory,
                                     self.ARCHIVED_URL_FILENAME.format(date=date))
             directory = os.path.join(self.archived_directory, date)
             _Fetcher(directory, self.timestamp, historical_mode=True).fetch()
-
 
     def _each_day(self) -> typing.Iterable[datetime.date]:
         day = datetime.date(*self.FIRST_DAY)
