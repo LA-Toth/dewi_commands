@@ -133,7 +133,10 @@ class _Fetcher:
 
         result = dict()
         for field in fields:
-            result[field.attrib['id'].replace('api-', '')] = int(field.text.replace(' ', ''))
+            if field.attrib['id'] != 'api-utolso-frissites':
+                result[field.attrib['id'].replace('api-', '')] = int(field.text.replace(' ', ''))
+            else:
+                result[field.attrib['id'].replace('api-', '')] = field[0].attrib['content']
 
         result['local-timestamp'] = self._parse_date('Magyarorsz', root)
         result['global-timestamp'] = self._parse_date('A vil', root)
@@ -190,7 +193,10 @@ class _Fetcher:
         return first
 
     def _map_gender(self, gender: str) -> str:
-        first_letter = gender.strip()[0].lower()
+        if not gender:
+            return '-'
+
+        first_letter = gender[0].lower()
         if first_letter == 'f':
             return 'man'
         else:
