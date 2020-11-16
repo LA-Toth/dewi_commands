@@ -175,7 +175,12 @@ class _Fetcher:
 
         for row in rows:
             index, gender, age, deseases = row[0].text, row[1].text, row[2].text, row[3].text
-            data = dict(index=int(index.strip()), gender=self._map_gender(gender.strip()), age=int(age.strip()))
+
+            try:
+                age = int(age.strip())
+            except ValueError:
+                age = -1
+            data = dict(index=int(index.strip()), gender=self._map_gender(gender.strip()), age=age)
 
             data['deseases'] = [x.strip() for x in deseases.split(',')]
 
