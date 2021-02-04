@@ -1,4 +1,4 @@
-# Copyright 2020 Laszlo Attila Toth
+# Copyright 2020-2021 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import datetime
@@ -9,6 +9,7 @@ import typing
 import urllib.request
 from io import StringIO
 
+import urllib3
 from lxml import etree
 
 from dewi_core.logger import log_debug, log_info
@@ -77,6 +78,11 @@ class _Fetcher:
 
         if not self.url:
             raise ValueError('The url parameter is required for historical mode in _Fetcher')
+
+        self.http = urllib3.PoolManager()
+
+    def __del__(self):
+        self.http.clear()
 
     def fetch(self):
         # return
@@ -159,6 +165,7 @@ class _Fetcher:
         while first != 1:
             first = self._fetch_deceased_nth(page, entries)
             page += 1
+            time.sleep(0.1)
 
         self._write_to_json(entries, self.deceased_file)
 
@@ -222,8 +229,8 @@ class _Fetcher:
             return f.read()
 
     def _fetch_url(self, url: str) -> bytes:
-        with urllib.request.urlopen(url) as response:
-            return response.read()
+        r = self.http.request('GET', url, retries=10)
+        return r.data
 
     def _write_to_json(self, data: typing.Union[dict, list], filename: str):
         with open(f'{self.directory}/{filename}', 'wt', encoding='UTF-8') as f:
