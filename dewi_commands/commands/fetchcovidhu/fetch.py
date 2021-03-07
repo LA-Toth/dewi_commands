@@ -151,10 +151,17 @@ class _Fetcher:
 
     def _parse_date(self, h2_prefix: str, root) -> str:
         p = root.xpath(f"//h2[starts-with(text(),'{h2_prefix}')]/../p")
+        # eg: "Legutolsó frissítés dátuma: 2021.03.06. 08:01"
+        # eg: "Legutolsó frissítés dátuma:&nbsp;2021.03.07&nbsp;08:01"
+        text = p[0].text.split(':', 1)[1].strip().replace('&nbsp;', ' ')
         try:
-            dt = datetime.datetime.strptime(p[0].text.split(':', 1)[1].strip(), '%Y.%m.%d. %H:%M')
+            dt = datetime.datetime.strptime(text, '%Y.%m.%d. %H:%M')
         except ValueError:
-            dt = datetime.datetime.strptime(p[0].text.split(':', 1)[1].strip(), '%Y.%m.%d.%H:%M')
+            try:
+                dt = datetime.datetime.strptime(text, '%Y.%m.%d.%H:%M')
+            except ValueError:
+                # eg: "Legutolsó frissítés dátuma:&nbsp;2021.03.07&nbsp;08:01"
+                dt = datetime.datetime.strptime(text, '%Y.%m.%d %H:%M')
         return dt.strftime("%Y-%m-%d %H:%M")
 
     def _fetch_deceased(self):
