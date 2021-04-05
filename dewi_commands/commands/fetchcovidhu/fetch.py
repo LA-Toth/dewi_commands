@@ -153,7 +153,8 @@ class _Fetcher:
         p = root.xpath(f"//h2[starts-with(text(),'{h2_prefix}')]/../p")
         # eg: "Legutolsó frissítés dátuma: 2021.03.06. 08:01"
         # eg: "Legutolsó frissítés dátuma:&nbsp;2021.03.07&nbsp;08:01"
-        text = p[0].text.split(':', 1)[1].strip().replace('&nbsp;', ' ')
+        # eg: 22021.04.05. 14:38
+        text = p[0].text.split(':', 1)[1].strip().replace('&nbsp;', ' ').replace('22021.', '2021.')
         try:
             dt = datetime.datetime.strptime(text, '%Y.%m.%d. %H:%M')
         except ValueError:
