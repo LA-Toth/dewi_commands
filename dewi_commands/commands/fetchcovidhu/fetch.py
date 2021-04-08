@@ -155,14 +155,22 @@ class _Fetcher:
         # eg: "Legutolsó frissítés dátuma:&nbsp;2021.03.07&nbsp;08:01"
         # eg: 22021.04.05. 14:38
         text = p[0].text.split(':', 1)[1].strip().replace('&nbsp;', ' ').replace('22021.', '2021.')
-        try:
-            dt = datetime.datetime.strptime(text, '%Y.%m.%d. %H:%M')
-        except ValueError:
+        patterns = [
+            '%Y.%m.%d. %H:%M',
+            '%Y.%m.%d.%H:%M',
+            '%Y.%m.%d %H:%M',
+            '%Y.%m.%d. %H.%M.',
+        ]
+
+        dt = None
+        for pattern in patterns:
             try:
-                dt = datetime.datetime.strptime(text, '%Y.%m.%d.%H:%M')
+                dt = datetime.datetime.strptime(text, pattern)
             except ValueError:
-                # eg: "Legutolsó frissítés dátuma:&nbsp;2021.03.07&nbsp;08:01"
-                dt = datetime.datetime.strptime(text, '%Y.%m.%d %H:%M')
+                continue
+
+        if dt is None:
+            raise ValueError(f"Unexpected format: {text}", )
         return dt.strftime("%Y-%m-%d %H:%M")
 
     def _fetch_deceased(self):
