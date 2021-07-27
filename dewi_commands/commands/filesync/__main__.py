@@ -1,14 +1,14 @@
-# Copyright 2020 Laszlo Attila Toth
+# Copyright 2020-2021 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import sys
 
 from dewi_commands.commands.filesync import FileSyncCommand
-from dewi_core.application import SingleCommandApplication
+from dewi_core.application import Application
 
 
 def main():
-    app = SingleCommandApplication('dewi-filesync', FileSyncCommand)
+    app = Application('dewi-filesync', FileSyncCommand)
     app.run(sys.argv[1:])
 
 

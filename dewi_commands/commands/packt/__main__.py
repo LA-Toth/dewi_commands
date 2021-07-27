@@ -1,14 +1,14 @@
-# Copyright 2020 Laszlo Attila Toth
+# Copyright 2020-2021 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import sys
 
 from dewi_commands.commands.packt import PacktCommand
-from dewi_core.application import SingleCommandApplication
+from dewi_core.application import Application
 
 
 def main():
-    app = SingleCommandApplication('dewi-packt', PacktCommand)
+    app = Application('dewi-packt', PacktCommand)
     app.run(sys.argv[1:])
 
 if __name__ == '__main__':

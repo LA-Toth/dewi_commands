@@ -1,9 +1,9 @@
-# Copyright 2020 Laszlo Attila Toth
+# Copyright 2020-2021 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import sys
 
-from dewi_core.miniapp import Application
+from dewi_core.application import Application
 from . import FindCommand
 
 
