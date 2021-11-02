@@ -37,6 +37,7 @@ class CommandsPlugin(Plugin):
             'dewi_commands.commands.fetchcovidhu.FetchCovidHuPlugin',
             'dewi_commands.commands.filesync.FileSyncPlugin',
             'dewi_commands.commands.find.FindPlugin',
+            'dewi_commands.commands.hash.HashPlugin',
             'dewi_commands.commands.jsonformatter.JSonFormatterPlugin',
             'dewi_commands.commands.license.LicensePlugin',
             'dewi_commands.commands.lithurgical.LithurgicalPlugin',
