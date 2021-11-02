@@ -69,9 +69,11 @@ setup(
         'dewi_logparsers>=2.0.2',
         'dewi_utils>=2.1.0',
         'dewi_realtime_sync>=2.0.0',
+        'lxml',
         'selenium',
         'sqlalchemy',
         'threadpool',
         'pyyaml',
+        'urllib3',
     ]
 )

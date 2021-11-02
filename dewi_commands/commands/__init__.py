@@ -27,7 +27,7 @@ class ImageHandlerCommandsPlugin(Plugin):
 
 class CommandsPlugin(Plugin):
     def get_description(self) -> str:
-        return "Commnands of DEWI"
+        return "Commands of DEWI"
 
     def get_dependencies(self) -> typing.Iterable[str]:
         return {

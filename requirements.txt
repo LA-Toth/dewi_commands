@@ -9,3 +9,5 @@ pyyaml
 
 setuptools
 lxml
+
+urllib3
