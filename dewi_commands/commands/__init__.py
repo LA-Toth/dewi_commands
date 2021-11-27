@@ -43,6 +43,7 @@ class CommandsPlugin(Plugin):
             'dewi_commands.commands.lithurgical.LithurgicalPlugin',
             'dewi_commands.commands.split_zorp_log.SplitZorpLogPlugin',
             'dewi_commands.commands.ssh_ubuntu_windows.SshToUbuntuOnWindowsPlugin',
+            'dewi_commands.commands.stocks.StocksPlugin',
             'dewi_commands.commands.worktime.WorktimePlugin',
         }
 
