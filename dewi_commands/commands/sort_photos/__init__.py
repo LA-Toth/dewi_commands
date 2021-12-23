@@ -2,15 +2,16 @@
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 
-import argparse
 import os
 import sqlite3
 import subprocess
 import time
 import typing
 
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 class FileEntry:
@@ -190,19 +191,20 @@ class PhotoSorterCommand(Command):
     aliases = ['sort-photos', 'sort-files', 'sortfiles', 'filesort']
     description = "Sort photos - or files - by its modification name and detect duplicates."
 
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument(
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_option(
             '-s', '--source', '--source-directory', dest='source_dir', required=True,
             help='Source Directory of files (photos) to be checked and cleaned')
-        parser.add_argument(
+        c.add_option(
             '-d', '--destination', '--destination-directory', dest='dest_dir', required=True,
             help='Target Root Directory - Files will be copied to $TARGET/$YEAR/$YEAR-$MONTH/$YEAR-$MONTH-$DAY')
-        parser.add_argument(
-            '--pretend', dest='pretend', default=False, action='store_true',
+        c.add_option(
+            '--pretend', dest='pretend', default=False, is_flag=True,
             help='Pretend only, but do not move files')
 
-    def run(self, args: argparse.Namespace):
-        sorter = PhotoSorter(args.source_dir, args.dest_dir, args.pretend)
+    def run(self, ctx: ApplicationContext):
+        sorter = PhotoSorter(ctx.args.source_dir, ctx.args.dest_dir, ctx.args.pretend)
         sorter.run()
 
 

@@ -2,15 +2,16 @@
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 
-import argparse
 import collections
 import errno
 import os
 import re
 import sys
 
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 class Splitter:
@@ -129,26 +130,28 @@ class SplitZorpLogCommand(Command):
     aliases = ['split-to-sessions']
     description = "Splits a Zorp log into several file, one session per file"
 
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument(
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_option(
             '-d', '--directory', '--target-directory', dest='directory', required=True,
             help='An empty or non-existant directory where the splitted logs will be')
-        parser.add_argument(
+        c.add_option(
             '--reopen', dest='reopen',
             help='Reopen each file when appending to it instead of store handles.'
                  ' It works with thousands of sessions but it is very slow')
-        parser.add_argument(
-            '-s', '--silent', dest='silent', action='store_true',
+        c.add_option(
+            '-s', '--silent', dest='silent', is_flag=True,
             help='Do not print status, the line numbers')
-        parser.add_argument(
+        c.add_option(
             '-D', '-m', '--delimiter', dest='delimiter', default='.' if sys.platform == 'win32' else ':',
             help='Delimiter character used in filename, default: same as in session_id, the colon')
-        parser.add_argument(
-            'zorplogfile', nargs='?', default='-',
+        c.add_argument(
+            'zorplogfile', nargs=1, default='-',
             help='The original Zorp log file to be splitted. Omit or use - to read from stdin')
 
-    def run(self, args: argparse.Namespace):
-        splitter = Splitter(args.zorplogfile, args.directory, args.delimiter, args.reopen, args.silent)
+    def run(self, ctx: ApplicationContext):
+        splitter = Splitter(ctx.args.zorplogfile, ctx.args.directory, ctx.args.delimiter, ctx.args.reopen,
+                            ctx.args.silent)
         splitter.run()
 
 

@@ -2,11 +2,11 @@
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 
-import argparse
 import os
 import shlex
 import subprocess
 
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
 
@@ -16,7 +16,7 @@ class SshToUbuntuOnWindows(Command):
     aliases = ['cu', 'chroot']
     description = "Ssh to localhost, to ubuntu on windows, into current directory"
 
-    def run(self, args: argparse.Namespace):
+    def run(self, ctx: ApplicationContext):
         path = self._prepare_path(os.getcwd())
         res = subprocess.run(
             ['ssh', '-oUserKnownHostsFile=/dev/null', '-oStrictHostKeyChecking=no', '127.0.0.1',

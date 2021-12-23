@@ -4,6 +4,7 @@
 import os
 import typing
 
+
 class Find:
     def __init__(self, directories: typing.List[str]):
         self.directories = directories

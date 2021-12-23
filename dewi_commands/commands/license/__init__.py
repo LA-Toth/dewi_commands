@@ -1,13 +1,14 @@
 # Copyright 2017-2018 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import argparse
 import os
 import time
 import typing
 
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 class LicenseChange:
@@ -23,8 +24,8 @@ class LicenseChange:
         'lgplv3': 'the GNU Lesser General Public License v3',
     }
 
-    def __init__(self, target: typing.List[str]):
-        self.target = target
+    def __init__(self, targets: typing.List[str]):
+        self.targets = targets
         self.license = 'lgplv3'
         self.year = time.strftime('%Y')
 
@@ -33,7 +34,7 @@ class LicenseChange:
             self._update_file(file)
 
     def _walk(self) -> typing.Iterable[str]:
-        for entry in self.target:
+        for entry in self.targets:
             if not os.path.exists(entry):
                 continue
 
@@ -98,29 +99,28 @@ class LicenseChange:
         return f'{self.COPYRIGHT_PREFIX}{date} {others}'
 
 
+class ChangeCommand(Command):
+    name = 'change'
+
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_option(
+            '--lgpl-v3', required=True, is_flag=True,
+            help='Swithces to LGPL v3')
+
+        c.add_argument(
+            'targets', nargs=-1, required=True, help='One or more directory or file to be updated')
+
+    def run(self, ctx: ApplicationContext):
+        LicenseChange(ctx.args.targets).run()
+
+
 class LicenseCommand(Command):
     name = 'license'
     description = "Switches between licenses (Distributed under the terms of X)"
-
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.set_defaults(func=parser.print_usage)
-        subparsers = parser.add_subparsers(dest='subcmd')
-        change = subparsers.add_parser('change')
-        change.add_argument(
-            '--lgpl-v3', required=True, action='store_true',
-            help='Swithces to LGPL v3')
-
-        change.add_argument(
-            'target', nargs="+", help='One or more directory or file to be updated')
-        change.set_defaults(func=self._license_change)
-
-    def run(self, args: argparse.Namespace):
-        if 'subcmd' in args:
-            self.ns = args
-        return args.func()
-
-    def _license_change(self):
-        LicenseChange(self.ns.target).run()
+    subcommand_classes = [
+        ChangeCommand,
+    ]
 
 
 LicensePlugin = CommandPlugin.create(LicenseCommand)

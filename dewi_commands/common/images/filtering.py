@@ -4,7 +4,6 @@
 
 import argparse
 import atexit
-import collections
 import enum
 import os
 import re
@@ -16,8 +15,8 @@ import typing
 
 import yaml
 
-from dewi_core.config.config import Config
 from dewi_commands.common.images.fileentry import FileEntry
+from dewi_core.config.config import Config
 
 
 class FilterResult(enum.Enum):

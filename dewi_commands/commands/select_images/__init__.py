@@ -1,13 +1,13 @@
 # Copyright 2019 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import argparse
-
-from dewi_core.command import Command
-from dewi_core.commandplugin import CommandPlugin
 from dewi_commands.common.images.filedb import FileDatabase
 from dewi_commands.common.images.fileentry import FileEntry
 from dewi_commands.common.images.filtering import Filter, FilterResult, ProcessInputToFilter
+from dewi_core.appcontext import ApplicationContext
+from dewi_core.command import Command
+from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 class ImageSelector:
@@ -80,17 +80,18 @@ class ImageSelectorCommand(Command):
     description = "Select photos - or files collected by 'collect-images' and create a filter file in YAML format. " \
                   "Use 'dedup-images' for next step."
 
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument(
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_option(
             '--filter', '--filter-file', dest='filter_file', required=True,
             help='File of filters')
 
-        parser.add_argument(
+        c.add_option(
             '--sql', '--sqlite-db', '--db', '-d', dest='db', required=True,
             help='SQLite database to read')
 
-    def run(self, args: argparse.Namespace):
-        sorter = ImageSelector(args.filter_file, args.db)
+    def run(self, ctx: ApplicationContext):
+        sorter = ImageSelector(ctx.args.filter_file, ctx.args.db)
         sorter.run()
 
 

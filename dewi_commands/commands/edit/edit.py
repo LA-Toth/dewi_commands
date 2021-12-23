@@ -1,12 +1,15 @@
 # Copyright 2015-2017 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import argparse
 import re
 import subprocess
 
+import click
+
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 def convert_to_vim_args(args):
@@ -29,11 +32,12 @@ class EditCommand(Command):
     aliases = ['ed']
     description = 'Calls vim with the file names and line numbers parsed from argument list.'
 
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument('file_list', nargs=argparse.REMAINDER, help='List of files for editing')
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_argument('file_list', nargs=-1, type=click.Path(), help='Files to open')
 
-    def run(self, args: argparse.Namespace):
-        args = ['vim'] + convert_to_vim_args(args.file_list)
+    def run(self, ctx: ApplicationContext):
+        args = ['vim'] + convert_to_vim_args(ctx.args.file_list)
         pipe = subprocess.Popen(args)
         pipe.communicate()
 

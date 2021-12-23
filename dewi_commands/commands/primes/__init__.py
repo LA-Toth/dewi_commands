@@ -1,11 +1,12 @@
 # Copyright 2018 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import argparse
 import typing
 
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 class PrimeGenerator:
@@ -45,17 +46,18 @@ class PrimesCommand(Command):
     aliases = ['prime']
     description = "Calculate first N primes"
 
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument('-s', '--smaller-than', dest='smaller_than', type=int,
-                            help='Print till the primes are smaller than this value.')
-        parser.add_argument('-c', '--count', type=int,
-                            help='Max number of printed primes (if --smaller-than is not specified, count is 100)')
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_option('-s', '--smaller-than', dest='smaller_than', type=int,
+                     help='Print till the primes are smaller than this value.')
+        c.add_option('-c', '--count', type=int,
+                     help='Max number of printed primes (if --smaller-than is not specified, count is 100)')
 
-    def run(self, args: argparse.Namespace):
-        if args.smaller_than is None and args.count is None:
-            args.count = 100
+    def run(self, ctx: ApplicationContext):
+        if ctx.args.smaller_than is None and ctx.args.count is None:
+            ctx.args.count = 100
 
-        p = PrimeGenerator(args.smaller_than, args.count)
+        p = PrimeGenerator(ctx.args.smaller_than, ctx.args.count)
         return p.run()
 
 

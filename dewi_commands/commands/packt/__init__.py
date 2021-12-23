@@ -1,12 +1,12 @@
 # Copyright 2018-2019 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import argparse
-
 from dewi_commands.commands.packt.config import load_config
 from dewi_commands.commands.packt.runner import run
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 class PacktCommand(Command):
@@ -14,10 +14,11 @@ class PacktCommand(Command):
     aliases = []
     description = "Packt stuffs"
 
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument('--wait', help='Wait a minute before closing Chrome', action='store_true')
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_option('--wait', help='Wait a minute before closing Chrome', is_flag=True)
 
-        driver_grp = parser.add_argument_group(
+        driver_grp = c.add_option_group(
             'Browser and WebDriver options',
             description='Options influences the behaviour of Selenium Web Driver and Google Chrome / Firefox')
 
@@ -25,17 +26,17 @@ class PacktCommand(Command):
                                 help='The directory to save any screenshot, default: current directory')
         driver_grp.add_argument('--download-directory', '--dl-dir', dest='download_dir', required=True,
                                 help='Download directory')
-        driver_grp.add_argument('--headless', action='store_true', help='Start Chrome in headless mode')
+        driver_grp.add_argument('--headless', is_flag=True, help='Start Chrome in headless mode')
         driver_grp.add_argument('--timeout', type=int, default=60,
                                 help='Timeout for waiting any element or action, default: 60s')
 
-    def run(self, args: argparse.Namespace):
+    def run(self, ctx: ApplicationContext):
         config = load_config()
-        config.driver.screenshot_directory = args.screenshot_dir
-        config.driver.download_directory = args.download_dir
-        config.driver.headless = args.headless
-        config.driver.timeout = args.timeout
-        config.wait_before_close = args.wait
+        config.driver.screenshot_directory = ctx.args.screenshot_dir
+        config.driver.download_directory = ctx.args.download_dir
+        config.driver.headless = ctx.args.headless
+        config.driver.timeout = ctx.args.timeout
+        config.wait_before_close = ctx.args.wait
 
         return run(config)
 

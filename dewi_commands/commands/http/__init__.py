@@ -2,13 +2,14 @@
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 
-import argparse
 import http.server
 import socketserver
 import typing
 
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
@@ -84,23 +85,24 @@ class HttpCommand(Command):
     # aliases = []
     description = "Streaming HTTP server, /dev/urandom"
 
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument('-p', '--port', type=int, default=8081,
-                            help='The port number, default: 8081')
-        parser.add_argument('--count', default='40M',
-                            help='Amount of bytes. Can be used the K/M/G suffix. Default: 40M')
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_option('-p', '--port', type=int, default=8081,
+                     help='The port number, default: 8081')
+        c.add_option('--count', default='40M',
+                     help='Amount of bytes. Can be used the K/M/G suffix. Default: 40M')
 
-    def run(self, args: argparse.Namespace):
-        if args.port < 1 or args.port > 65535:
-            print(f'Invalid port number: {args.port}')
+    def run(self, ctx: ApplicationContext):
+        if ctx.args.port < 1 or ctx.args.port > 65535:
+            print(f'Invalid port number: {ctx.args.port}')
             return 1
 
-        success, count = Http.convert_count(args.count)
+        success, count = Http.convert_count(ctx.args.count)
         if not success:
-            print('Unable to convert count to a number: ' + args.count)
+            print('Unable to convert count to a number: ' + ctx.args.count)
             return 1
 
-        p = Http(args.port, count)
+        p = Http(ctx.args.port, count)
         return p.run()
 
 

@@ -1,16 +1,17 @@
 # Copyright 2017-2019 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import argparse
 import os
 import subprocess
 import time
 import typing
 
-from dewi_core.command import Command
-from dewi_core.commandplugin import CommandPlugin
 from dewi_commands.common.images.filedb import FileDatabase
 from dewi_commands.common.images.fileentry import FileEntry
+from dewi_core.appcontext import ApplicationContext
+from dewi_core.command import Command
+from dewi_core.commandplugin import CommandPlugin
+from dewi_core.optioncontext import OptionContext
 
 
 class SafeEraserConfig:
@@ -159,22 +160,23 @@ class SafeEraserCommand(Command):
     name = 'safe-delete-images'
     description = "Erase duplicated photos - or files that successfully copied to their target location"
 
-    def register_arguments(self, parser: argparse.ArgumentParser):
-        parser.add_argument(
+    @staticmethod
+    def register_arguments(c: OptionContext):
+        c.add_option(
             '--sql', '--sqlite-db', '--db', '-d', dest='db', required=True,
             help='SQLite database to read and update')
 
-        parser.add_argument('--log-file', dest='log_file', required=True,
-                            help='Log file for detailed run')
+        c.add_option('--log-file', dest='log_file', required=True,
+                     help='Log file for detailed run')
 
-        parser.add_argument('--dry-run', '-n', dest='dry_run', action='store_true',
-                            help='Do change file system, just print what would do')
+        c.add_option('--dry-run', '-n', dest='dry_run', is_flag=True,
+                     help='Do change file system, just print what would do')
 
-    def run(self, args: argparse.Namespace):
+    def run(self, ctx: ApplicationContext):
         config = SafeEraserConfig()
-        config.sqlite_filename = args.db
-        config.dry_run = args.dry_run
-        config.log_file = args.log_file
+        config.sqlite_filename = ctx.args.db
+        config.dry_run = ctx.args.dry_run
+        config.log_file = ctx.args.log_file
 
         sorter = SafeEraser(config)
         sorter.run()

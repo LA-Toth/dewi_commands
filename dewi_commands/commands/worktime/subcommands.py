@@ -1,19 +1,26 @@
 # Copyright 2019 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import argparse
 import os.path
 import sys
 import typing
 
+from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
+from dewi_core.config.node import Node
+from dewi_core.optioncontext import OptionContext
 from .worktime_main import WorktimeImporter, WorktimeManager, WorktimeProcessor
 
 
 class Subcommand(Command):
     ext = 'sqlite'
 
-    def _validate_filename(self, args: argparse.Namespace) -> bool:
+    @classmethod
+    def register_arguments(cls, c: OptionContext):
+        c.add_option('--filename',
+                     help='Filename or ~/WT.{ext} or ~/WORKTIME.{ext}'.format(ext=cls.ext))
+
+    def _validate_filename(self, args: Node) -> bool:
         if not args.filename:
             args.filename = os.path.expanduser('~/WT.' + self.ext)
             if not os.path.exists(args.filename):
@@ -33,14 +40,16 @@ class Import(Subcommand):
     aliases = ['imp']
     description = 'Import a .TXT file into the database'
 
-    def register_arguments(self, parser: argparse.ArgumentParser) -> None:
-        parser.add_argument('-s', '--source', required=True, help='The source .TXT file')
+    @classmethod
+    def register_arguments(cls, c: OptionContext) -> None:
+        Subcommand.register_arguments(c)
+        c.add_option('-s', '--source', required=True, help='The source .TXT file')
 
-    def run(self, args: argparse.Namespace) -> typing.Optional[int]:
-        if not self._validate_filename(args):
+    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+        if not self._validate_filename(ctx.args):
             return 1
 
-        return WorktimeImporter(args.filename, args.source).run()
+        return WorktimeImporter(ctx.args.filename, ctx.args.source).run()
 
 
 class Login(Subcommand):
@@ -48,11 +57,11 @@ class Login(Subcommand):
     aliases = ['in']
     description = 'Log in'
 
-    def run(self, args: argparse.Namespace) -> typing.Optional[int]:
-        if not self._validate_filename(args):
+    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+        if not self._validate_filename(ctx.args):
             return 1
 
-        return WorktimeManager(args.filename).login()
+        return WorktimeManager(ctx.args.filename).login()
 
 
 class Logout(Subcommand):
@@ -60,11 +69,11 @@ class Logout(Subcommand):
     aliases = ['out']
     description = 'Log out'
 
-    def run(self, args: argparse.Namespace) -> typing.Optional[int]:
-        if not self._validate_filename(args):
+    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+        if not self._validate_filename(ctx.args):
             return 1
 
-        return WorktimeManager(args.filename).logout()
+        return WorktimeManager(ctx.args.filename).logout()
 
 
 class Print(Subcommand):
@@ -73,12 +82,14 @@ class Print(Subcommand):
     description = 'Prints the current worktime entries and stat'
     ext = 'txt'
 
-    def register_arguments(self, parser: argparse.ArgumentParser) -> None:
-        parser.add_argument('-t', '--today', action='store_true', default=False,
-                            help='Print stat of today only and the summary')
+    @classmethod
+    def register_arguments(cls, c: OptionContext) -> None:
+        Subcommand.register_arguments(c)
+        c.add_option('-t', '--today', is_flag=True, default=False,
+                     help='Print stat of today only and the summary')
 
-    def run(self, args: argparse.Namespace) -> typing.Optional[int]:
-        if not self._validate_filename(args):
+    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+        if not self._validate_filename(ctx.args):
             return 1
 
-        return WorktimeProcessor(args.filename, today_only=args.today).run()
+        return WorktimeProcessor(ctx.args.filename, today_only=ctx.args.today).run()

@@ -11,5 +11,6 @@ def main():
     app = Application('dewi-primes', PrimesCommand)
     app.run(sys.argv[1:])
 
+
 if __name__ == '__main__':
-        main()
+    main()

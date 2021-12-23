@@ -11,5 +11,6 @@ def main():
     app = Application('dewi-packt', PacktCommand)
     app.run(sys.argv[1:])
 
+
 if __name__ == '__main__':
-        main()
+    main()
