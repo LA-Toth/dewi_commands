@@ -8,7 +8,7 @@ import enum
 import math
 import typing
 
-from dewi_core.config.node import SealableNode
+from dewi_core.config.node import Node
 from dewi_core.utils.yaml import save_to_yaml
 
 # Float numbers are not precise, so let's define a limit which can be handled as zero
@@ -38,7 +38,7 @@ class Action(enum.Enum):
         return self.name.lower()
 
 
-class StockInputEntry(SealableNode):
+class StockInputEntry(Node):
     def __init__(self):
         self.date: datetime.date = None
         self.action: Action = None
@@ -62,7 +62,7 @@ class StockInputEntry(SealableNode):
         return r
 
 
-class SharePriceAmount(SealableNode):
+class SharePriceAmount(Node):
     def __init__(self):
         self.price: float = 0.0
         self.amount: float = 0.0
@@ -75,7 +75,7 @@ class SharePriceAmount(SealableNode):
         return s
 
 
-class ShareState(SealableNode):
+class ShareState(Node):
     def __init__(self):
         self.name: str = ''
         self.amount: float = 0
@@ -86,7 +86,7 @@ class ShareState(SealableNode):
         self._seal()
 
 
-class State(SealableNode):
+class State(Node):
     def __init__(self):
         self.input_entry: StockInputEntry = None
         self.shares_state: typing.Dict[str, ShareState] = dict()
