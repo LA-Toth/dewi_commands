@@ -1,3 +1,15 @@
+3.0.0
+  - add 'find' command to emulate (GNU) find on Windows
+  - fix deprecation warnings (Python 3.8)
+  - depends on Python 3.8+ (or at least not tested with earlier verisons)
+  - add 'fetch-covid-hu' to fetch koronavirus.gov.hu
+  - add 'hash' and 'stocks' commands
+  - 'license change': support Apache2, LGPL v3 and GPL v3 licenses
+  - add 'dewi_commands.commands.DeprecatedCommandsPlugin' (packt
+    and ssh_on_ubuntu_on_windows)
+  - add all commands to the command plugin except the deprecated commands
+    (http, primes, sysinfo)
+
 2.1.1
   - setup.py: add missing dependencies
 
@@ -13,7 +25,7 @@
 
 2.0.0
   - !!! DEWI goes into multiple repositories and packages
-  - use only 'protected' members with single leading underscore ('_')
+  - use only 'protected' members with single leading underscore ('_')a
   - commands: argparse.Namespace object's 'protected', custom
     members end with '_' instead of leading '_',
   - add sortphotos command to sort a bunch of photos into directories

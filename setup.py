@@ -6,8 +6,8 @@
 
 import sys
 
-if sys.hexversion < 0x03060000:
-    raise RuntimeError("Required python version: 3.6 or newer (current: %s)" % sys.version)
+if sys.hexversion < 0x03080000:
+    raise RuntimeError("Required python version: 3.8 or newer (current: %s)" % sys.version)
 
 try:
     from setuptools import setup, find_packages
@@ -19,7 +19,7 @@ setup(
     name="dewi_commands",
     description="A toolchain and framework for everyday tasks",
     license="LGPLv3",
-    version="2.1.1",
+    version="3.0.0",
     author="Laszlo Attila Toth",
     author_email="python-dewi@laszloattilatoth.me",
     maintainer="Laszlo Attila Toth",
@@ -38,12 +38,11 @@ setup(
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.6',
-        'Topic :: System :: Filesystems',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Software Development',
         'Topic :: Software Development :: Libraries',
-        'Topic :: Software Development :: Libraries :: Application Frameworks',
-        'Topic :: Documentation :: Sphinx',
         'Topic :: Utilities',
     ],
     zip_safe=True,
@@ -51,15 +50,14 @@ setup(
     python_requires='>=3.6',
     packages=find_packages(exclude=['pylintcheckers', '*test*']),
     install_requires=[
-        'dewi_core>=3.1.0',
+        'dewi_core >=5.0.0, <6',
         'dewi_module_framework>=2.0.1',
-        'dewi_logparsers>=2.0.2',
-        'dewi_utils>=2.1.0',
-        'dewi_realtime_sync>=2.0.0',
+        'dewi_logparsers >=2.0.2, <3',
+        'dewi_utils >=3.0.0, <4',
+        'dewi_realtime_sync >=2.0.0, <3',
         'lxml',
         'selenium',
         'sqlalchemy',
-        'threadpool',
         'pyyaml',
         'urllib3',
     ]
