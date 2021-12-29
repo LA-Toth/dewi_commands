@@ -8,8 +8,7 @@ from dewi_core.loader.plugin import Plugin
 
 
 class ImageHandlerCommandsPlugin(Plugin):
-    def get_description(self):
-        return "Commands to collect / sort / copy / delete images (photos)"
+    """Commands to collect / sort / copy / delete images (photos)"""
 
     def get_dependencies(self) -> typing.Iterable[str]:
         return {
@@ -24,9 +23,21 @@ class ImageHandlerCommandsPlugin(Plugin):
         pass
 
 
+class DeprecatedCommandsPlugin(Plugin):
+    """Deprecated commands which are not needed anymore or doesn't work"""
+
+    def get_dependencies(self) -> typing.Iterable[str]:
+        return {
+            'dewi_commands.commands.packt.PacktPlugin',
+            'dewi_commands.commands.ssh_ubuntu_windows.SshToUbuntuOnWindowsPlugin',
+        }
+
+    def load(self, c: Context):
+        pass
+
+
 class CommandsPlugin(Plugin):
-    def get_description(self) -> str:
-        return "Commands of DEWI"
+    """Commands of DEWI"""
 
     def get_dependencies(self) -> typing.Iterable[str]:
         return {
@@ -41,7 +52,6 @@ class CommandsPlugin(Plugin):
             'dewi_commands.commands.license.LicensePlugin',
             'dewi_commands.commands.lithurgical.LithurgicalPlugin',
             'dewi_commands.commands.split_zorp_log.SplitZorpLogPlugin',
-            'dewi_commands.commands.ssh_ubuntu_windows.SshToUbuntuOnWindowsPlugin',
             'dewi_commands.commands.stocks.StocksPlugin',
             'dewi_commands.commands.worktime.WorktimePlugin',
         }
