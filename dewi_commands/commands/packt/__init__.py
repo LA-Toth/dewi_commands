@@ -16,18 +16,18 @@ class PacktCommand(Command):
 
     @staticmethod
     def register_arguments(c: OptionContext):
-        c.add_option('--wait', help='Wait a minute before closing Chrome', is_flag=True)
+        c.add_option('--wait-for-close', help='Wait a minute before closing Chrome', is_flag=True)
 
-        driver_grp = c.add_option_group(
+        driver_grp = c.add_group(
             'Browser and WebDriver options',
-            description='Options influences the behaviour of Selenium Web Driver and Google Chrome / Firefox')
+            help='Options influences the behaviour of Selenium Web Driver and Google Chrome / Firefox')
 
-        driver_grp.add_argument('--screenshots', '--screenshot-dir', dest='screenshot_dir', default='.',
+        driver_grp.add_option('--screenshots', '--screenshot-dir', dest='screenshot_dir', default='.',
                                 help='The directory to save any screenshot, default: current directory')
-        driver_grp.add_argument('--download-directory', '--dl-dir', dest='download_dir', required=True,
+        driver_grp.add_option('--download-directory', '--dl-dir', dest='download_dir', required=True,
                                 help='Download directory')
-        driver_grp.add_argument('--headless', is_flag=True, help='Start Chrome in headless mode')
-        driver_grp.add_argument('--timeout', type=int, default=60,
+        driver_grp.add_option('--headless', is_flag=True, help='Start Chrome in headless mode')
+        driver_grp.add_option('--timeout', type=int, default=60,
                                 help='Timeout for waiting any element or action, default: 60s')
 
     def run(self, ctx: ApplicationContext):
@@ -36,7 +36,7 @@ class PacktCommand(Command):
         config.driver.download_directory = ctx.args.download_dir
         config.driver.headless = ctx.args.headless
         config.driver.timeout = ctx.args.timeout
-        config.wait_before_close = ctx.args.wait
+        config.wait_before_close = ctx.args.wait_for_close
 
         return run(config)
 
