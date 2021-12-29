@@ -48,10 +48,13 @@ class CommandsPlugin(Plugin):
             'dewi_commands.commands.filesync.FileSyncPlugin',
             'dewi_commands.commands.find.FindPlugin',
             'dewi_commands.commands.hash.HashPlugin',
+            'dewi_commands.commands.http.HttpPlugin',
             'dewi_commands.commands.jsonformatter.JSonFormatterPlugin',
             'dewi_commands.commands.license.LicensePlugin',
             'dewi_commands.commands.lithurgical.LithurgicalPlugin',
+            'dewi_commands.commands.primes.PrimesPlugin',
             'dewi_commands.commands.split_zorp_log.SplitZorpLogPlugin',
+            'dewi_commands.commands.sysinfo.SysInfoPlugin',
             'dewi_commands.commands.stocks.StocksPlugin',
             'dewi_commands.commands.worktime.WorktimePlugin',
         }
