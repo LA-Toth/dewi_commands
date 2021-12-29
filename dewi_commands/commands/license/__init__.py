@@ -20,13 +20,14 @@ class LicenseChange:
     COPYRIGHT_PREFIX2 = '# Copyright (c) '
     LICENSE_PREFIX = '# Distributed under the terms of'
     LICENSES = {
+        'apache2': 'the Apache License, Version 2.0',
         'gplv3': 'the GNU General Public License v3',
         'lgplv3': 'the GNU Lesser General Public License v3',
     }
 
-    def __init__(self, targets: typing.List[str]):
+    def __init__(self, license_type: str, targets: typing.List[str]):
         self.targets = targets
-        self.license = 'lgplv3'
+        self.license = license_type
         self.year = time.strftime('%Y')
 
     def run(self):
@@ -104,15 +105,15 @@ class ChangeCommand(Command):
 
     @staticmethod
     def register_arguments(c: OptionContext):
-        c.add_option(
-            '--lgpl-v3', required=True, is_flag=True,
-            help='Swithces to LGPL v3')
+        licenses = c.add_mutually_exclusive_group('License Types', required=True)
+        for name, text in LicenseChange.LICENSES.items():
+            licenses.add_option(f'--{name}', dest='license_type', flag_value=name, help=f'Switches to {text}')
 
         c.add_argument(
             'targets', nargs=-1, required=True, help='One or more directory or file to be updated')
 
     def run(self, ctx: ApplicationContext):
-        LicenseChange(ctx.args.targets).run()
+        LicenseChange(ctx.args.license_type, ctx.args.targets).run()
 
 
 class LicenseCommand(Command):
