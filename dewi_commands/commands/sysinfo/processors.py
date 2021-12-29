@@ -4,10 +4,8 @@
 import datetime
 import os.path
 
-import yaml
-from yaml import CLoader
-
 from dewi_core.logger import log_info
+from dewi_core.utils.yaml import load_yaml
 from dewi_module_framework.messages import Messages
 from dewi_utils.network import NetworkCardVendors
 from .config.constants import COMMON_NETWORK_CARD_VENDOR_LIST, Mode
@@ -66,8 +64,7 @@ class Processor:
             render(self._output_dir, [self.BASE_PATH, os.path.join(self.BASE_PATH, 'parts')], self.TEMPLATE_FILENAME,
                    self.config, messages, generated=True)
         else:
-            with open(self.generated_yaml_file) as f:
-                self.config.overwrite_config(yaml.load(f.read(), CLoader))
+            self.config.overwrite_config(load_yaml(self.generated_yaml_file))
             render(self._output_dir, [self.BASE_PATH, os.path.join(self.BASE_PATH, 'parts')], self.TEMPLATE_FILENAME,
                    self.config, None, generated=False)
 
