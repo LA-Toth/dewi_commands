@@ -155,9 +155,11 @@ class _Fetcher:
         # eg: "Legutolsó frissítés dátuma:&nbsp;2021.03.07&nbsp;08:01"
         # eg: 22021.04.05. 14:38
         # eg: 2021.04.16.. 08:26
+        # 22022-05-11
         text = p[0].text.split(':', 1)[1].strip() \
             .replace('&nbsp;', ' ') \
             .replace('22021.', '2021.') \
+            .replace('22022.', '2022.')  \
             .replace('..', '.')
         patterns = [
             '%Y.%m.%d. %H:%M',
