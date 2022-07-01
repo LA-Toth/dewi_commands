@@ -7,7 +7,7 @@ import time
 
 from selenium import webdriver
 
-from dewi_core.logger import logger
+from dewi_core.logger import log_info
 
 
 def save_screenshot(driver: webdriver.Chrome, directory: str, filename_prefix: str):
@@ -18,6 +18,6 @@ def save_screenshot(driver: webdriver.Chrome, directory: str, filename_prefix: s
     timestamp = time.strftime('%Y%m%d_%H%M%S_UTC', time.gmtime(time.time()))
     filename = '{}{}.png'.format(filename_prefix, timestamp)
 
-    logger.info('Saving screenshot', dict(directory=directory, filename=filename))
+    log_info('Saving screenshot', dict(directory=directory, filename=filename))
     driver.get_screenshot_as_file(
         os.path.join(directory, filename))

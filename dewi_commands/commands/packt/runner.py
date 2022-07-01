@@ -16,7 +16,7 @@ from selenium.webdriver.remote.webdriver import WebDriver as RemoteWebDriver
 from dewi_commands.commands.packt.config import Config
 from dewi_commands.commands.packt.packt import Packt
 from dewi_commands.commands.packt.utils import save_screenshot
-from dewi_core.logger import logger
+from dewi_core.logger import log_error, log_info, log_debug
 
 
 def run(config: Config) -> int:
@@ -41,9 +41,9 @@ class Runner:
                 tb_str += '  File %s:%s in %s\n    %s\n' % (t.filename, t.lineno, t.name, t.line)
 
             for line in tb_str.splitlines(keepends=False):
-                logger.debug(line)
+                log_debug(line)
 
-            logger.error('{}'.format(exc))
+            log_error('{}'.format(exc))
 
             if driver is not None:
                 save_screenshot(driver, self._config.driver.screenshot_directory, 'packt-fail')
@@ -52,7 +52,7 @@ class Runner:
             if driver:
                 try:
                     if self._config.wait_before_close:
-                        logger.info('Sleeping 60 seconds for checking content')
+                        log_info('Sleeping 60 seconds for checking content')
                         time.sleep(60)
                 except:
                     driver.quit()
@@ -129,7 +129,7 @@ class Runner:
                                  firefox_profile=profile)
 
     def _update(self, url: str, data: dict):
-        logger.debug('Patching data', dict(url=url, data=data))
+        log_debug('Patching data', dict(url=url, data=data))
         request = urllib.request.Request(url
                                          , method='PATCH'
                                          , data=json.dumps(data).encode('UTF-8')

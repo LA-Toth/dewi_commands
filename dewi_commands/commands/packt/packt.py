@@ -16,7 +16,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from dewi_commands.commands.packt.config import Config
 from dewi_commands.commands.packt.utils import save_screenshot
-from dewi_core.logger import logger
+from dewi_core.logger import log_error, log_info, log_debug
 from dewi_core.utils.yaml import save_to_yaml
 
 
@@ -54,7 +54,7 @@ class Packt:
         self._save_screenshot(prefix or 'siebel-fail')
 
     def login(self) -> bool:
-        logger.info('Logging in, trying at most 5 times')
+        log_info('Logging in, trying at most 5 times')
 
         success = False
         counter = 0
@@ -62,7 +62,7 @@ class Packt:
         while not success and counter < self._config.packt.login_retry_limit:
             counter += 1
 
-            logger.info('Login attempt #{}'.format(counter))
+            log_info('Login attempt #{}'.format(counter))
             try:
                 self._driver.get('https://www.packtpub.com/#')
 
@@ -77,7 +77,7 @@ class Packt:
                 success = True
 
             except:
-                logger.error(
+                log_error(
                     "Login failed for " + str(counter) + " time, in " + str(self._timeout) +
                     " sec, page title is: " + self._driver.title)
                 self._save_failure('siebel-login-failure')
@@ -87,7 +87,7 @@ class Packt:
         return counter <= 5
 
     def _wait_and_click_by_xpath(self, xpath: str):
-        logger.debug(f'Wait and click on xpath "{xpath}"')
+        log_debug(f'Wait and click on xpath "{xpath}"')
         WebDriverWait(self._driver, self._timeout).until(
             EC.presence_of_element_located((By.XPATH, xpath)))
         WebDriverWait(self._driver, self._timeout).until(
@@ -101,14 +101,14 @@ class Packt:
                 return
 
             except ElementNotInteractableException:
-                logger.error('Element is not interactable as of now')
+                log_error('Element is not interactable as of now')
                 time.sleep(4)
             except WebDriverException as e:
                 if 'is not clickable at point' in e.msg and (
                         ' Other element would receive the click' in e.msg  # chrome
                         or ' because another element ' in e.msg  # firefox
                 ):
-                    logger.error('Another element would receive the click, try again after a while')
+                    log_error('Another element would receive the click, try again after a while')
                     time.sleep(4)
                 else:
                     raise e
@@ -128,7 +128,7 @@ class Packt:
 
     def _wait_for_dl(self):
         while self.has_unfinished_download():
-            logger.debug('Waiting to finish download')
+            log_debug('Waiting to finish download')
             time.sleep(3)
 
     def _move_dl_file_to(self, book_title):
@@ -150,7 +150,7 @@ class Packt:
         for item in os.listdir(self._config.driver.download_directory):
             full_path = os.path.join(self._config.driver.download_directory, item)
             if os.path.isfile(full_path):
-                logger.debug('Unlink unknown file', dict(path=full_path))
+                log_debug('Unlink unknown file', dict(path=full_path))
                 os.unlink(full_path)
 
     def _full_path_for_title(self, book_title: str, filename: str):
@@ -163,7 +163,7 @@ class Packt:
             while not done:
                 try:
                     self._driver.get('https://www.packtpub.com/account/my-ebooks?page={}'.format(page))
-                    logger.info('Loaded site, wait 5 seconds', dict(page=page))
+                    log_info('Loaded site, wait 5 seconds', dict(page=page))
                     time.sleep(5)
 
                     with TimeoutChanger(self, 5):
@@ -182,10 +182,10 @@ class Packt:
                             ".//div[@class='float-left product-thumbnail toggle']//noscript").get_attribute(
                             'innerHTML').split(' ', 3)[1].replace('src=', '').replace('"', '')
 
-                        logger.info('Processing book', dict(title=title, page=page))
+                        log_info('Processing book', dict(title=title, page=page))
 
                         if self._is_downloaded(title):
-                            logger.info('Book is already downloaded')
+                            log_info('Book is already downloaded')
                             continue
 
                         self._ensure_clean_dl_dir()
@@ -199,12 +199,12 @@ class Packt:
                                     'href') and '/code_download/' not in a_elem.get_attribute('href'):
                                 continue
 
-                            logger.info('Clicking on link', dict(href=a_elem.get_attribute('href')))
+                            log_info('Clicking on link', dict(href=a_elem.get_attribute('href')))
 
                             a_elem.click()
                             time.sleep(1.5)
 
-                        logger.debug('Wait 2 seconds before checking if there is a download')
+                        log_debug('Wait 2 seconds before checking if there is a download')
                         time.sleep(2)
                         self._wait_for_dl()
                         self._move_dl_file_to(title)
@@ -217,7 +217,7 @@ class Packt:
                                 f.write(response.read())
 
                         close_elem.click()
-                        logger.debug('Wait 2 seconds before loading next book to lower server load')
+                        log_debug('Wait 2 seconds before loading next book to lower server load')
                         time.sleep(2)
 
                     done = True
@@ -232,9 +232,9 @@ class Packt:
                         tb_str += '  File %s:%s in %s\n    %s\n' % (t.filename, t.lineno, t.name, t.line)
 
                     for line in tb_str.splitlines(keepends=False):
-                        logger.debug(line)
+                        log_debug(line)
 
-                    logger.error('{}'.format(exc))
+                    log_error('{}'.format(exc))
                     time.sleep(1)
 
     def download_urls(self):
@@ -244,7 +244,7 @@ class Packt:
             while not done:
                 try:
                     self._driver.get('https://www.packtpub.com/account/my-ebooks?page={}'.format(i))
-                    logger.info('Loaded site, wait 5 seconds', dict(page=i))
+                    log_info('Loaded site, wait 5 seconds', dict(page=i))
                     time.sleep(5)
 
                     for elem in self._driver.find_elements_by_xpath("//div[@class = 'product-line unseen']"):
@@ -276,8 +276,8 @@ class Packt:
                         tb_str += '  File %s:%s in %s\n    %s\n' % (t.filename, t.lineno, t.name, t.line)
 
                     for line in tb_str.splitlines(keepends=False):
-                        logger.debug(line)
+                        log_debug(line)
 
-                    logger.error('{}'.format(exc))
+                    log_error('{}'.format(exc))
 
             save_to_yaml(books, os.path.expanduser('~/ebooks.yml'))
