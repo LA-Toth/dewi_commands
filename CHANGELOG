@@ -1,3 +1,7 @@
+3.0.1
+  - packt: use log_*() methods instead of internal logger
+   (_logger since dewi-core 5.2.0)
+
 3.0.0
   - add 'find' command to emulate (GNU) find on Windows
   - fix deprecation warnings (Python 3.8)
