@@ -1,17 +1,16 @@
-# Copyright 2017 Tóth, László Attila
+# Copyright 2017-2022 Tóth, László Attila
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import os
 import sys
 import time
-import typing
 
 
 class FileEntry:
     SUFFIXES = ['KB', 'MB', 'GB', 'TB', 'PB']
 
     def __init__(self, orig_path: str, basename: str, uppercase_basename: str, mod_date: int, file_size: int,
-                 checksum: typing.Optional[str] = None, id: typing.Optional[int] = None):
+                 checksum: str | None = None, id: int | None = None):
         self.orig_path = orig_path
         self.basename = basename
         self.uppercase_basename = uppercase_basename

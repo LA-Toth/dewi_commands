@@ -1,7 +1,6 @@
-# Copyright 2018 Laszlo Attila Toth
+# Copyright 2018-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import typing
 
 from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
@@ -10,7 +9,7 @@ from dewi_core.optioncontext import OptionContext
 
 
 class PrimeGenerator:
-    def __init__(self, smaller_than: typing.Optional[int], count: typing.Optional[int]):
+    def __init__(self, smaller_than: int | None, count: int | None):
         self.smaller_than = smaller_than
         self.count = count
 

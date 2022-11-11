@@ -1,4 +1,5 @@
-import typing
+# Copyright 2017-2022 Laszlo Attila Toth
+# Distributed under the terms of the GNU Lesser General Public License v3
 
 from dewi_module_framework.messages import Level
 from ..common.base_module_ import LogparserBaseModule
@@ -17,7 +18,7 @@ class PhpModule(LogparserBaseModule):
     def start(self):
         self._events = list()
 
-    def fatal_error(self, time: str, program: str, pid: typing.Optional[str], msg: str):
+    def fatal_error(self, time: str, program: str, pid: str | None, msg: str):
         self._events.append(f'{time} - {msg}')
 
     def finish(self):

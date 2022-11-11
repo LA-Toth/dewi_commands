@@ -1,8 +1,6 @@
 # Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import typing
-
 from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
@@ -47,7 +45,7 @@ class LocalCommand(SubCommand):
         super().register_directory_args(c)
         super().register_sync_entries(c)
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         entries = EntryListLoader().load_from_string_list(ctx.args.entry, ctx.args.skip_chmod)
         app = LocalSyncApp(ctx.args.directory, ctx.args.target_directory, entries)
         return app.run()
@@ -84,7 +82,7 @@ class RemoteCommand(SubCommand):
             help='Skip check SSH host key - it is insecure, but in trusted environment it is reasonable'
         )
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         entries = EntryListLoader().load_from_string_list(ctx.args.entry, ctx.args.skip_chmod)
         app = SyncOverSshApp(ctx.args.directory, ctx.args.target_directory, entries,
                              user=ctx.args.user, host=ctx.args.host, port=ctx.args.port,
@@ -118,7 +116,7 @@ class KubernetesCommand(SubCommand):
             help='The container name in the pod'
         )
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         entries = EntryListLoader().load_from_string_list(ctx.args.entry, ctx.args.skip_chmod)
         app = SyncOverKubernetesApp(ctx.args.directory, ctx.args.target_directory, entries,
                                     namespace=ctx.current_args.namespace, pod=ctx.current_args.pod,

@@ -1,9 +1,8 @@
-# Copyright 2019 Laszlo Attila Toth
+# Copyright 2019-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import os.path
 import sys
-import typing
 
 from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
@@ -45,7 +44,7 @@ class Import(Subcommand):
         Subcommand.register_arguments(c)
         c.add_option('-s', '--source', required=True, help='The source .TXT file')
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         if not self._validate_filename(ctx.args):
             return 1
 
@@ -57,7 +56,7 @@ class Login(Subcommand):
     aliases = ['in']
     description = 'Log in'
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         if not self._validate_filename(ctx.args):
             return 1
 
@@ -69,7 +68,7 @@ class Logout(Subcommand):
     aliases = ['out']
     description = 'Log out'
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         if not self._validate_filename(ctx.args):
             return 1
 
@@ -88,7 +87,7 @@ class Print(Subcommand):
         c.add_option('-t', '--today', is_flag=True, default=False,
                      help='Print stat of today only and the summary')
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         if not self._validate_filename(ctx.args):
             return 1
 

@@ -1,11 +1,10 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import os
 import shutil
 import subprocess
 import time
-import typing
 
 from dewi_commands.common.images.filedb import FileDatabase
 from dewi_commands.common.images.fileentry import FileEntry
@@ -49,14 +48,14 @@ class ImageDeduplicator:
         self.db = FileDatabase(self.config.sqlite_filename)
         self.log = open(self.config.log_file, 'a')
         self.moved = dict()
-        self._selected_for_move: typing.List[FileEntry] = list()
+        self._selected_for_move: list[FileEntry] = list()
         self._selected_hash = dict()  # (uppercase-name, file-size, date, checksum) => true
         self._count = dict(n=0, r=0, d=0)  # new, reject, dup
         self._print_count = False
 
-        self._target_entries: typing.Dict[str, FileEntry] = dict()
+        self._target_entries: dict[str, FileEntry] = dict()
 
-        self.steps: typing.List[Step] = [
+        self.steps: list[Step] = [
             Step(self._read_from_db, 'Read file information from database and select accepted images'),
             Step(self._make_file_names_unique, 'Prepare file information as unique target names'),
             Step(self._store_file_path_map, 'Store (cache) file mapping information into the DB'),

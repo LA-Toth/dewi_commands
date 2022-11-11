@@ -1,12 +1,11 @@
-# Copyright 2017-2018 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-
+import collections.abc
 import os
 import sqlite3
 import subprocess
 import time
-import typing
 
 from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
@@ -83,7 +82,7 @@ class FileDatabase:
 
         return c.fetchone()
 
-    def insert(self, file_entry: FileEntry, checksum: typing.Optional[str] = None):
+    def insert(self, file_entry: FileEntry, checksum: str | None = None):
         self._conn.execute('INSERT INTO photo_file_info'
                            ' VALUES (?,?,?, ?,?,?)',
                            [
@@ -130,7 +129,7 @@ class PhotoSorter:
         self._move()
         return 0
 
-    def _walk(self) -> typing.Iterable[FileEntry]:
+    def _walk(self) -> collections.abc.Iterable[FileEntry]:
         for root, _, files in os.walk(self.source_dir):
             for name in files:
                 full_path = os.path.join(root, name)
@@ -146,7 +145,7 @@ class PhotoSorter:
 
         return ext not in ['.jpg', '.jpeg', '.cr2', '.mov', '.mp4', '.thm']
 
-    def _mod_date_and_file_size(self, full_path: str) -> typing.Tuple[int, int]:
+    def _mod_date_and_file_size(self, full_path: str) -> tuple[int, int]:
         f = os.stat(full_path)
 
         return int(f.st_mtime), f.st_size

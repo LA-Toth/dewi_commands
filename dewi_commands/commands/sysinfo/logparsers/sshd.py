@@ -1,7 +1,5 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
-
-import typing
 
 from dewi_module_framework.messages import Level
 from ..common.base_module_ import LogparserBaseModule
@@ -20,7 +18,7 @@ class SshdModule(LogparserBaseModule):
     def start(self):
         self._kex_failures = list()
 
-    def no_supported_kex_algo(self, time: str, program: str, pid: typing.Optional[str], msg: str):
+    def no_supported_kex_algo(self, time: str, program: str, pid: str | None, msg: str):
         self._kex_failures.append(time)
 
     def finish(self):

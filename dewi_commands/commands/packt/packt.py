@@ -1,11 +1,10 @@
-# Copyright 2018-2019 Laszlo Attila Toth
+# Copyright 2018-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import os
 import sys
 import time
 import traceback
-import typing
 import urllib.request
 
 from selenium import webdriver
@@ -50,7 +49,7 @@ class Packt:
     def _save_screenshot(self, filename_prefix: str):
         save_screenshot(self._driver, self._config.driver.screenshot_directory, filename_prefix)
 
-    def _save_failure(self, prefix: typing.Optional[str] = None):
+    def _save_failure(self, prefix: str | None = None):
         self._save_screenshot(prefix or 'siebel-fail')
 
     def login(self) -> bool:

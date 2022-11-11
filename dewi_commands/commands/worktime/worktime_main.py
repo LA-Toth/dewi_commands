@@ -1,10 +1,9 @@
-# Copyright 2019 Laszlo Attila Toth
+# Copyright 2019-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import datetime
 import re
 import time
-import typing
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -15,14 +14,14 @@ from dewi_core.logger import log_debug
 
 
 class Entry:
-    def __init__(self, date: str, intervals: typing.List[typing.Tuple[str, str]]):
+    def __init__(self, date: str, intervals: list[tuple[str, str]]):
         self.date = time.strptime(date, '%Y-%m-%d')
-        self.intervals: typing.List[typing.Tuple[str, str]] = intervals
+        self.intervals: list[tuple[str, str]] = intervals
 
-        self.intervals_: typing.List[typing.Tuple[datetime.datetime, typing.Optional[datetime.datetime]]] = None
+        self.intervals_: list[tuple[datetime.datetime, datetime.datetime | None]] = None
 
-    def intervals_as_datetimes(self, *, use_current_time=False) -> typing.List[
-        typing.Tuple[datetime.datetime, typing.Optional[datetime.datetime]]]:
+    def intervals_as_datetimes(self, *, use_current_time=False) -> \
+            list[tuple[datetime.datetime, datetime.datetime | None]]:
         if self.intervals_ is None:
             self.intervals_ = []
 
@@ -84,7 +83,7 @@ class WorktimeProcessor:
         self._stat(sum_seconds, required_seconds, required_seconds - sum_seconds)
 
     def _entries(self):
-        def create_tuple(s: str) -> typing.Tuple[str, str]:
+        def create_tuple(s: str) -> tuple[str, str]:
             return tuple(s.split('-'))
 
         with open(self.filename) as f:
@@ -98,7 +97,7 @@ class WorktimeProcessor:
                     list(map(create_tuple, parts[1:]))
                 )
 
-    def sum_of_day(self, entry: Entry) -> typing.Tuple[time.struct_time, int, int, int, int]:
+    def sum_of_day(self, entry: Entry) -> tuple[time.struct_time, int, int, int, int]:
         log_debug(f'Summarize date: {entry.date}')
 
         def create_dt(s: str) -> datetime.datetime:
@@ -197,7 +196,7 @@ class WorktimeImporter(DatabaseUser):
         self.session.commit()
 
     def _entries(self):
-        def create_tuple(s: str) -> typing.Tuple[str, str]:
+        def create_tuple(s: str) -> tuple[str, str]:
             return tuple(s.split('-'))
 
         with open(self.source_filename) as f:

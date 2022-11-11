@@ -1,10 +1,9 @@
-# Copyright 2018 Laszlo Attila Toth
+# Copyright 2018-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 
 import http.server
 import socketserver
-import typing
 
 from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
@@ -50,7 +49,7 @@ class Http:
         self.count = count
 
     @classmethod
-    def convert_count(cls, count: str) -> typing.Tuple[bool, int]:
+    def convert_count(cls, count: str) -> tuple[bool, int]:
         try:
             count = int(count)
             return True, count

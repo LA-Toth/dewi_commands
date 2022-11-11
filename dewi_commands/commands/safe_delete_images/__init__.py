@@ -1,10 +1,9 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import os
 import subprocess
 import time
-import typing
 
 from dewi_commands.common.images.filedb import FileDatabase
 from dewi_commands.common.images.fileentry import FileEntry
@@ -35,13 +34,13 @@ class SafeEraser:
         self.config = config
         self.db = FileDatabase(self.config.sqlite_filename)
         self.log = open(self.config.log_file, 'a')
-        self.copied: typing.Dict[str, FileEntry] = dict()
+        self.copied: dict[str, FileEntry] = dict()
         self.safe_to_delete = list()
         self.known_rows = set()
         self.copied_hashes = dict()
         self.copied_hashes_without_date = dict()
 
-        self.steps: typing.List[Step] = [
+        self.steps: list[Step] = [
             Step(self._read_from_db, 'Read copied file entries'),
             Step(self._find_duplicates, 'Find duplicates of copied files from DB'),
             Step(self._erase_duplicates, 'Remove duplicates from file sytem'),

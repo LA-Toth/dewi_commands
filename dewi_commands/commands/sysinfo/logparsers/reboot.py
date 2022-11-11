@@ -1,7 +1,5 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
-
-import typing
 
 from dewi_module_framework.messages import Level
 from ..common.base_module_ import LogparserBaseModule
@@ -20,7 +18,7 @@ class RebootModule(LogparserBaseModule):
     def start(self):
         self._reboots = list()
 
-    def system_reboot(self, time: str, program: str, pid: typing.Optional[str], msg: str):
+    def system_reboot(self, time: str, program: str, pid: str | None, msg: str):
         self._reboots.append(time)
 
     def finish(self):

@@ -1,7 +1,5 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
-
-import typing
 
 from dewi_module_framework.messages import Level
 from ..common.base_module_ import LogparserBaseModule
@@ -20,7 +18,7 @@ class PostfixModule(LogparserBaseModule):
     def start(self):
         self._events = list()
 
-    def delivery_suspended(self, time: str, program: str, pid: typing.Optional[str], msg: str):
+    def delivery_suspended(self, time: str, program: str, pid: str | None, msg: str):
         self._events.append(f'{time} - {msg}')
 
     def finish(self):

@@ -1,10 +1,9 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import datetime
 import os
 import shutil
-import typing
 
 import yaml
 
@@ -14,8 +13,8 @@ from dewi_utils.rrdtool.writer import GraphResult
 from .config.sysinfoconfig import SysInfoConfig
 
 
-def render(output_dir: str, base_path: typing.Union[str, typing.List[str]], template_path: str,
-           config: SysInfoConfig, messages: typing.Optional[Messages],
+def render(output_dir: str, base_path: str | list[str], template_path: str,
+           config: SysInfoConfig, messages: Messages | None,
            *,
            generated: bool = True):
     os.makedirs(output_dir, 0o755, exist_ok=True)
@@ -94,6 +93,6 @@ def _transform_graphs(config: SysInfoConfig):
     config.set('graphs', graphs_new)
 
 
-def _prepare_config(config: SysInfoConfig, messages: typing.Optional[Messages]):
+def _prepare_config(config: SysInfoConfig, messages: Messages | None):
     config.set('alerts', messages.alerts)
     config.set('warnings', messages.warnings)

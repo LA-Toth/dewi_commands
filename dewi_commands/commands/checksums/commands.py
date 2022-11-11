@@ -1,12 +1,12 @@
 #  Copyright 2022, Laszlo Attila Toth
 #  Distributed under the terms of the Apache License, Version 2.0
 
+import collections.abc
 import datetime
 import os
 import sqlite3
 import subprocess
 import time
-import typing
 from subprocess import CalledProcessError
 
 from dewi_core.appcontext import ApplicationContext
@@ -17,7 +17,7 @@ from dewi_core.optioncontext import OptionContext
 
 class FileEntry:
     def __init__(self, filename: str, basename: str, uppercase_basename: str, mod_date: int, file_size: int,
-                 checksum: typing.Optional[str] = None):
+                 checksum: str | None = None):
         self.filename = filename
         self.basename = basename
         self.uppercase_basename = uppercase_basename
@@ -71,7 +71,7 @@ class FileDatabase:
 
         return c.fetchone()
 
-    def insert(self, file_entry: FileEntry, checksum: typing.Optional[str] = None):
+    def insert(self, file_entry: FileEntry, checksum: str | None = None):
         self._conn.execute('INSERT INTO file_info'
                            ' (filename, upper_basename, filesize, mod_date, checksum)'
                            ' VALUES (?,?,?,?,?)',
@@ -128,7 +128,7 @@ class Processor:
 
         return 0
 
-    def _walk(self) -> typing.Iterable[FileEntry]:
+    def _walk(self) -> collections.abc.Iterable[FileEntry]:
         os.chdir(self.directory)
         for root, _, files in os.walk('.'):
             for name in files:
@@ -138,7 +138,7 @@ class Processor:
                 except OSError as e:
                     log_error(str(e))
 
-    def _mod_date_and_file_size(self, full_path: str) -> typing.Tuple[int, int]:
+    def _mod_date_and_file_size(self, full_path: str) -> tuple[int, int]:
         f = os.stat(full_path)
 
         return int(f.st_mtime), f.st_size
@@ -178,7 +178,7 @@ class CalculateCommand(Command):
             '-p', '--pretend', dest='pretend', default=False, is_flag=True,
             help='Pretend only, walk directory tree without checksum')
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         processor = Processor(ctx.current_args.directory, ctx.args.db_filename, ctx.current_args.pretend)
         return processor.run()
 
@@ -187,7 +187,7 @@ class PrintCommand(Command):
     name = 'print'
     description = "Print checksums"
 
-    def run(self, ctx: ApplicationContext) -> typing.Optional[int]:
+    def run(self, ctx: ApplicationContext) -> int | None:
         db = FileDatabase(ctx.args.db_filename)
         db.select_all(self._print)
         return 0

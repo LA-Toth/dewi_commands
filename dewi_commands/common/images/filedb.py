@@ -1,9 +1,9 @@
-# Copyright 2017-2019 Tóth, László Attila
+# Copyright 2017-2022 Tóth, László Attila
 # Distributed under the terms of the GNU Lesser General Public License v3
 
+import collections.abc
 import os.path
 import sqlite3
-import typing
 
 from dewi_commands.common.images.fileentry import FileEntry
 
@@ -62,7 +62,7 @@ class FileDatabase:
             self._conn.rollback()
             self._changed = False
 
-    def insert(self, file_entry: FileEntry, checksum: typing.Optional[str] = None):
+    def insert(self, file_entry: FileEntry, checksum: str | None = None):
         self._conn.execute('INSERT INTO photo_file_info'
                            ' VALUES (?,?,?, ?,?,?)',
                            [
@@ -88,13 +88,13 @@ class FileDatabase:
         for row in c.execute('SELECT *,rowid FROM photo_file_info ORDER BY orig_filename'):
             yield row
 
-    def iterate_photo_entries(self) -> typing.Iterable[FileEntry]:
+    def iterate_photo_entries(self) -> collections.abc.Iterable[FileEntry]:
         c = self._conn.cursor()
         for db_entry in c.execute('SELECT *,rowid FROM photo_file_info ORDER BY orig_filename'):
             yield FileEntry(db_entry[0], os.path.basename(db_entry[0]),
                             db_entry[2], db_entry[4], db_entry[3], db_entry[5], db_entry[6])
 
-    def iterate_target_path_entries(self) -> typing.Iterable[typing.Tuple[str, FileEntry]]:
+    def iterate_target_path_entries(self) -> collections.abc.Iterable[tuple[str, FileEntry]]:
         c = self._conn.cursor()
         c2 = self._conn.cursor()
         for entry_id, path in c.execute('SELECT * FROM photo_file_info_new_path_map ORDER BY new_filename'):

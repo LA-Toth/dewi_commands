@@ -1,7 +1,6 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import typing
 
 from dewi_module_framework.messages import Level
 from ..common.base_module_ import LogparserBaseModule
@@ -20,7 +19,7 @@ class ClockModule(LogparserBaseModule):
     def start(self):
         self._issues = []
 
-    def clock_skew_detected(self, time: str, program: typing.Optional[str], pid: str, msg: str):
+    def clock_skew_detected(self, time: str, program: str | None, pid: str, msg: str):
         self._issues.append(f'{time} - {msg}')
 
     def finish(self):

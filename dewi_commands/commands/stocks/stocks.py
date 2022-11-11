@@ -1,4 +1,4 @@
-# Copyright 2021 Laszlo Attila Toth
+# Copyright 2021-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import copy
@@ -6,7 +6,6 @@ import csv
 import datetime
 import enum
 import math
-import typing
 
 from dewi_core.config.node import Node
 from dewi_core.utils.yaml import save_to_yaml
@@ -82,14 +81,14 @@ class ShareState(Node):
         self.dividend_gain: float = 0.0
         self.share_gain: float = 0.0
         self.total_gain: float = 0.0
-        self.amount_details: typing.List[SharePriceAmount] = []
+        self.amount_details: list[SharePriceAmount] = []
         self._seal()
 
 
 class State(Node):
     def __init__(self):
         self.input_entry: StockInputEntry = None
-        self.shares_state: typing.Dict[str, ShareState] = dict()
+        self.shares_state: dict[str, ShareState] = dict()
         self.gain: float = 0.0
         self.loss: float = 0.0
         self.dividend: float = 0.0
@@ -166,7 +165,7 @@ class StocksProcessor:
         self._output = output_filename
 
         self._rows = []
-        self._state: typing.List[State] = []
+        self._state: list[State] = []
         self._last_state = State()
 
     def process(self):

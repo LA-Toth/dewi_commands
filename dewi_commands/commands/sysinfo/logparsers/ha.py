@@ -1,7 +1,6 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import typing
 
 from dewi_module_framework.messages import Level
 from ..common.base_module_ import LogparserBaseModule
@@ -32,7 +31,7 @@ class HaModule(LogparserBaseModule):
                                  for x in self._hb_issues
                              ])
 
-    def cl_status(self, time: str, program: str, pid: typing.Optional[str], msg: str):
+    def cl_status(self, time: str, program: str, pid: str | None, msg: str):
         # self.add_message(Level.WARNING, 'HA', 'HA', 'CL:' + msg)
         pass
 

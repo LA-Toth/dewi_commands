@@ -1,9 +1,8 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import re
 import subprocess
-import typing
 
 from ..common.base_module_ import BaseModule
 
@@ -66,7 +65,7 @@ class DmiDecodeParserModule(BaseModule):
 
                 self.append(config_entry, line)
 
-    def _init_entries(self, last_item: typing.Optional[str] = None):
+    def _init_entries(self, last_item: str | None = None):
         entry = [last_item] if last_item else []
         config_entry = '_ll.dmidecode.{}'.format('.'.join(entry))
         return config_entry, entry

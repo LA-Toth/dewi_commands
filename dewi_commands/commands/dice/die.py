@@ -1,8 +1,7 @@
-# Copyright 2019 Laszlo Attila Toth
+# Copyright 2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import random
-import typing
 
 
 class InvalidDie(ValueError):
@@ -30,7 +29,7 @@ class DieRoll:
 
 
 class Die:
-    def roll(self, dice: typing.Optional[str] = None):
+    def roll(self, dice: str | None = None):
         dice_str = dice or 'd6'
 
         dice = self._parse(dice_str)

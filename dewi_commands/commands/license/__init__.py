@@ -1,9 +1,9 @@
-# Copyright 2017-2018 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
+import collections.abc
 import os
 import time
-import typing
 
 from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
@@ -25,7 +25,7 @@ class LicenseChange:
         'lgplv3': 'the GNU Lesser General Public License v3',
     }
 
-    def __init__(self, license_type: str, targets: typing.List[str]):
+    def __init__(self, license_type: str, targets: list[str]):
         self.targets = targets
         self.license = license_type
         self.year = time.strftime('%Y')
@@ -34,7 +34,7 @@ class LicenseChange:
         for file in self._walk():
             self._update_file(file)
 
-    def _walk(self) -> typing.Iterable[str]:
+    def _walk(self) -> collections.abc.Iterable[str]:
         for entry in self.targets:
             if not os.path.exists(entry):
                 continue
@@ -73,7 +73,7 @@ class LicenseChange:
                 for line in others:
                     print(line, file=f)
 
-    def _update_headers(self, headers: typing.List[str]):
+    def _update_headers(self, headers: list[str]):
         result = []
         for header in headers:
             if header.startswith(self.LICENSE_PREFIX):

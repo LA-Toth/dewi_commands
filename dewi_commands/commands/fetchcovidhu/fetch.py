@@ -1,11 +1,11 @@
-# Copyright 2020-2021 Laszlo Attila Toth
+# Copyright 2020-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
+import collections.abc
 import datetime
 import json
 import os
 import time
-import typing
 import urllib.request
 from io import StringIO
 
@@ -63,9 +63,9 @@ class _HistoricalMainPageParser:
 class _Fetcher:
     BASE_URL = 'https://koronavirus.gov.hu'
 
-    def __init__(self, directory: str, timestamp: typing.Optional[datetime.datetime] = None, *,
+    def __init__(self, directory: str, timestamp: datetime.datetime | None = None, *,
                  historical_mode: bool = False,
-                 url: typing.Optional[str] = None):
+                 url: str | None = None):
         self.directory = directory
         self.timestamp = timestamp or datetime.datetime.now()
         self.historical_mode = historical_mode
@@ -159,7 +159,7 @@ class _Fetcher:
         text = p[0].text.split(':', 1)[1].strip() \
             .replace('&nbsp;', ' ') \
             .replace('22021.', '2021.') \
-            .replace('22022.', '2022.')  \
+            .replace('22022.', '2022.') \
             .replace('..', '.')
         patterns = [
             '%Y.%m.%d. %H:%M',
@@ -254,7 +254,7 @@ class _Fetcher:
         r = self.http.request('GET', url, retries=10)
         return r.data
 
-    def _write_to_json(self, data: typing.Union[dict, list], filename: str):
+    def _write_to_json(self, data: dict | list, filename: str):
         with open(f'{self.directory}/{filename}', 'wt', encoding='UTF-8') as f:
             json.dump(data, f, indent=2)
 
@@ -298,7 +298,7 @@ class _HistoricalFetcher:
             directory = os.path.join(self.archived_directory, date)
             _Fetcher(directory, self.timestamp, historical_mode=True).fetch()
 
-    def _each_day(self) -> typing.Iterable[datetime.date]:
+    def _each_day(self) -> collections.abc.Iterable[datetime.date]:
         day = datetime.date(*self.FIRST_DAY)
         last_day = datetime.date.today()
         while day <= last_day:

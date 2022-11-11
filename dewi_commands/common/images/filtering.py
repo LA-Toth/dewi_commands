@@ -1,8 +1,9 @@
-# Copyright 2017-2019 Tóth, László Attila
+# Copyright 2017-2022 Tóth, László Attila
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import argparse
 import atexit
+import collections.abc
 import enum
 import os
 import re
@@ -10,7 +11,6 @@ import readline
 import shlex
 import subprocess
 import sys
-import typing
 
 import yaml
 
@@ -87,7 +87,7 @@ class Filter:
         accepted_dir = self._decide_dir_is_accepted(entry)
         return self._decide_file_is_accepted(entry, accepted_dir)
 
-    def _decide_dir_is_accepted(self, entry: FileEntry) -> typing.Optional[bool]:
+    def _decide_dir_is_accepted(self, entry: FileEntry) -> bool | None:
         directory = os.path.dirname(entry.orig_path)
         dir_parts = directory.split(os.path.sep)
         accepted_dir = None
@@ -125,7 +125,7 @@ class Filter:
 
         return accepted_dir
 
-    def _decide_file_is_accepted(self, entry: FileEntry, dir_is_accepted: typing.Optional[bool]) -> FilterResult:
+    def _decide_file_is_accepted(self, entry: FileEntry, dir_is_accepted: bool | None) -> FilterResult:
         result = FilterResult.UNSPECIFIED
         if dir_is_accepted:
             matched = False
@@ -182,12 +182,12 @@ class ProcessInputToFilter:
 
         return parser
 
-    def _register_parser(self, subparsers, name: str, aliases: typing.Iterable[str], func: callable, help: str):
+    def _register_parser(self, subparsers, name: str, aliases: collections.abc.Iterable[str], func: callable, help: str):
         parser = subparsers.add_parser(name, aliases=aliases, help=help)
         parser.set_defaults(func=func)
         return parser
 
-    def _register_parser_with_default_help(self, subparsers, name: str, aliases: typing.Iterable[str], help: str):
+    def _register_parser_with_default_help(self, subparsers, name: str, aliases: collections.abc.Iterable[str], help: str):
         parser = subparsers.add_parser(name, aliases=aliases, help=help)
         parser.set_defaults(func=parser.print_help)
         return parser

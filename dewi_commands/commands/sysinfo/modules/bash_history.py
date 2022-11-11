@@ -1,10 +1,9 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import datetime
 import os.path
 import re
-import typing
 
 from dewi_core.config.node import Node
 from dewi_module_framework.messages import Level
@@ -14,7 +13,7 @@ from ..common.base_module_ import BaseModule
 class BashEntry(Node):
     def __init__(self):
         self.timestamp: datetime.datetime = None
-        self.lines: typing.List[str] = []
+        self.lines: list[str] = []
 
 
 class BashHistoryModule(BaseModule):
@@ -27,7 +26,7 @@ class BashHistoryModule(BaseModule):
         if not os.path.exists(filename):
             return
 
-        entries: typing.List[BashEntry] = []
+        entries: list[BashEntry] = []
         entry: BashEntry = None
 
         with open(filename) as f:

@@ -1,8 +1,7 @@
-# Copyright 2017-2019 Laszlo Attila Toth
+# Copyright 2017-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import os.path
-import typing
 from abc import ABCMeta
 from xml.etree.ElementTree import Element
 
@@ -24,7 +23,7 @@ class BaseModule(Module, metaclass=ABCMeta):
         self._root_node = self._dp_config.get_main_node()
         self._ll_node = self._dp_config.get_low_level_details()
 
-    def _read(self, filename: str) -> typing.Tuple[bool, typing.Optional[str]]:
+    def _read(self, filename: str) -> tuple[bool, str | None]:
         """
         Reads a file's content and returns (exists, content) tuple
         The return value is either (False, None) or (True, content).
@@ -40,7 +39,7 @@ class BaseModule(Module, metaclass=ABCMeta):
 
 
 class XmlBasedModule(BaseModule, metaclass=ABCMeta):
-    def _get_element_by_id(self, id: str) -> typing.Optional[Element]:
+    def _get_element_by_id(self, id: str) -> Element | None:
         return self.get('xml.root').find(".//*[@id='{}']".format(id))
 
 

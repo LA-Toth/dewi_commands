@@ -1,7 +1,7 @@
-# Copyright 2015-2019 Laszlo Attila Toth
+# Copyright 2015-2022 Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
-import typing
+import collections.abc
 
 from dewi_core.loader.context import Context
 from dewi_core.loader.plugin import Plugin
@@ -10,7 +10,7 @@ from dewi_core.loader.plugin import Plugin
 class ImageHandlerCommandsPlugin(Plugin):
     """Commands to collect / sort / copy / delete images (photos)"""
 
-    def get_dependencies(self) -> typing.Iterable[str]:
+    def get_dependencies(self) -> collections.abc.Iterable[str]:
         return {
             'dewi_commands.commands.collect_images.ImageCollectorPlugin',
             'dewi_commands.commands.deduplicate_images.ImageDeduplicatorPlugin',
@@ -26,7 +26,7 @@ class ImageHandlerCommandsPlugin(Plugin):
 class DeprecatedCommandsPlugin(Plugin):
     """Deprecated commands which are not needed anymore or doesn't work"""
 
-    def get_dependencies(self) -> typing.Iterable[str]:
+    def get_dependencies(self) -> collections.abc.Iterable[str]:
         return {
             'dewi_commands.commands.packt.PacktPlugin',
             'dewi_commands.commands.ssh_ubuntu_windows.SshToUbuntuOnWindowsPlugin',
@@ -39,7 +39,7 @@ class DeprecatedCommandsPlugin(Plugin):
 class CommandsPlugin(Plugin):
     """Commands of DEWI"""
 
-    def get_dependencies(self) -> typing.Iterable[str]:
+    def get_dependencies(self) -> collections.abc.Iterable[str]:
         return {
             'dewi_commands.commands.ImageHandlerCommandsPlugin',
             'dewi_commands.commands.checksums.ChecksumsPlugin',
