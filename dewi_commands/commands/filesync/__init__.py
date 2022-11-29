@@ -104,6 +104,10 @@ class KubernetesCommand(SubCommand):
     @staticmethod
     def _register_ssh_args(c: OptionContext):
         c.add_option(
+            '-j', '--jobs', dest='jobs', type=int, default=1,
+            help='Sync files in parallel. Default: single threaded. EXPERIMENTAL.'
+        )
+        c.add_option(
             '-N', '--namespace', required=True,
             help='The kubernetes namespace'
         )
@@ -119,6 +123,7 @@ class KubernetesCommand(SubCommand):
     def run(self, ctx: ApplicationContext) -> int | None:
         entries = EntryListLoader().load_from_string_list(ctx.args.entry, ctx.args.skip_chmod)
         app = SyncOverKubernetesApp(ctx.args.directory, ctx.args.target_directory, entries,
+                                    parallel=ctx.current_args.jobs,
                                     namespace=ctx.current_args.namespace, pod=ctx.current_args.pod,
                                     container=ctx.current_args.container)
         return app.run()
