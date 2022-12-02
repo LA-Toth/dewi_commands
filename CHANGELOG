@@ -1,3 +1,9 @@
+3.1.0:
+  - use type annotations w/o typing module, requires python 3.10+
+  - filesync kubernetes app: add experimental parallel sync support
+  - pin dependencies; selenium requires urllib3 < 2
+  - add shell (bash) command & plugin (python3 -m dewi_commands.commands.shell)
+
 3.0.1
   - packt: use log_*() methods instead of internal logger
    (_logger since dewi-core 5.2.0)

@@ -15,7 +15,7 @@ setup(
     name="dewi_commands",
     description="A toolchain and framework for everyday tasks",
     license="LGPLv3",
-    version="3.0.1",
+    version="3.1.0",
     author="Laszlo Attila Toth",
     author_email="python-dewi@laszloattilatoth.me",
     maintainer="Laszlo Attila Toth",
