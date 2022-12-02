@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # DEWI: a developer tool and framework
-# Copyright (C) 2012-2021  Laszlo Attila Toth
+# Copyright (C) 2012-2022  Laszlo Attila Toth
 # Distributed under the terms of the GNU Lesser General Public License v3
 
 import sys
@@ -9,11 +9,7 @@ import sys
 if sys.hexversion < 0x030a0000:
     raise RuntimeError("Required python version: 3.10 or newer (current: %s)" % sys.version)
 
-try:
-    from setuptools import setup, find_packages
-
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name="dewi_commands",
@@ -58,6 +54,6 @@ setup(
         'selenium',
         'sqlalchemy',
         'pyyaml',
-        'urllib3',
+        'urllib3 <2',
     ]
 )

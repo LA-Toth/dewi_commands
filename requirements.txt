@@ -9,4 +9,5 @@ pyyaml
 setuptools
 lxml
 
-urllib3
+# selenium requires 1.26
+urllib3 <2
