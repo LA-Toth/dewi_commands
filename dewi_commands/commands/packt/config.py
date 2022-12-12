@@ -3,7 +3,7 @@
 
 import os.path
 
-from dewi_core.config.node import Node
+from dewi_dataclass.node import Node
 
 
 class PacktOptions(Node):

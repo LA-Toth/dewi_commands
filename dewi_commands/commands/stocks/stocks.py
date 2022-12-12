@@ -7,8 +7,9 @@ import datetime
 import enum
 import math
 
-from dewi_core.config.node import Node
 from dewi_core.utils.yaml import save_to_yaml
+from dewi_dataclass import frozen
+from dewi_dataclass.node import Node
 
 # Float numbers are not precise, so let's define a limit which can be handled as zero
 ABOUT_ZERO = math.pow(10, -5)
@@ -37,6 +38,7 @@ class Action(enum.Enum):
         return self.name.lower()
 
 
+@frozen
 class StockInputEntry(Node):
     def __init__(self):
         self.date: datetime.date = None
@@ -45,7 +47,6 @@ class StockInputEntry(Node):
         self.price: float = 0
         self.share_price: float = 0
         self.share_amount: float = 0
-        self._seal()
 
     @classmethod
     def create(cls, entry_date: str, action: str, stock: str, price: str, share_price: str, amount: str):
@@ -61,6 +62,7 @@ class StockInputEntry(Node):
         return r
 
 
+@frozen
 class SharePriceAmount(Node):
     def __init__(self):
         self.price: float = 0.0
@@ -74,6 +76,7 @@ class SharePriceAmount(Node):
         return s
 
 
+@frozen
 class ShareState(Node):
     def __init__(self):
         self.name: str = ''
@@ -82,9 +85,9 @@ class ShareState(Node):
         self.share_gain: float = 0.0
         self.total_gain: float = 0.0
         self.amount_details: list[SharePriceAmount] = []
-        self._seal()
 
 
+@frozen
 class State(Node):
     def __init__(self):
         self.input_entry: StockInputEntry = None
@@ -93,7 +96,6 @@ class State(Node):
         self.loss: float = 0.0
         self.dividend: float = 0.0
         self.total: float = 0.0
-        self._seal()
 
     def get_share_state(self, share_name: str):
         if share_name not in self.shares_state:

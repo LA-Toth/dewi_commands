@@ -3,7 +3,7 @@
 
 from xml.etree import ElementTree
 
-from dewi_core.config.node import Node
+from dewi_dataclass.node import Node
 
 
 class Xml(Node):

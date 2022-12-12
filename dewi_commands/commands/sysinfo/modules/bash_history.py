@@ -5,7 +5,7 @@ import datetime
 import os.path
 import re
 
-from dewi_core.config.node import Node
+from dewi_dataclass.node import Node
 from dewi_module_framework.messages import Level
 from ..common.base_module_ import BaseModule
 

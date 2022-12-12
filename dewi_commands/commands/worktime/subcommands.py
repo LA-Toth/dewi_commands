@@ -6,7 +6,7 @@ import sys
 
 from dewi_core.appcontext import ApplicationContext
 from dewi_core.command import Command
-from dewi_core.config.node import Node
+from dewi_dataclass.node import Node
 from dewi_core.optioncontext import OptionContext
 from .worktime_main import WorktimeImporter, WorktimeManager, WorktimeProcessor
 

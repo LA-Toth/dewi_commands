@@ -50,6 +50,7 @@ setup(
         'dewi_logparsers >=2.0.2, <3',
         'dewi_utils >=3.0.0, <4',
         'dewi_realtime_sync >=2.0.0, <3',
+        'dewi-dataclass >=1.0.0,<2',
         'lxml',
         'selenium',
         'sqlalchemy',
