@@ -28,6 +28,7 @@ class DeprecatedCommandsPlugin(Plugin):
 
     def get_dependencies(self) -> collections.abc.Iterable[str]:
         return {
+            'dewi_commands.commands.fetchcovidhu.FetchCovidHuPlugin',
             'dewi_commands.commands.packt.PacktPlugin',
             'dewi_commands.commands.ssh_ubuntu_windows.SshToUbuntuOnWindowsPlugin',
         }
@@ -45,7 +46,6 @@ class CommandsPlugin(Plugin):
             'dewi_commands.commands.checksums.ChecksumsPlugin',
             'dewi_commands.commands.dice.DicePlugin',
             'dewi_commands.commands.edit.edit.EditPlugin',
-            'dewi_commands.commands.fetchcovidhu.FetchCovidHuPlugin',
             'dewi_commands.commands.filesync.FileSyncPlugin',
             'dewi_commands.commands.find.FindPlugin',
             'dewi_commands.commands.hash.HashPlugin',
