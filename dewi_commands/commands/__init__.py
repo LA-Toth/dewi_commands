@@ -43,6 +43,7 @@ class CommandsPlugin(Plugin):
     def get_dependencies(self) -> collections.abc.Iterable[str]:
         return {
             'dewi_commands.commands.ImageHandlerCommandsPlugin',
+            'dewi_commands.commands.awgmm.AwgMmPlugin',
             'dewi_commands.commands.checksums.ChecksumsPlugin',
             'dewi_commands.commands.dice.DicePlugin',
             'dewi_commands.commands.edit.edit.EditPlugin',
