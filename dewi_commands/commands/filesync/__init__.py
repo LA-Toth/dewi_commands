@@ -6,6 +6,7 @@ from dewi_core.command import Command
 from dewi_core.commandplugin import CommandPlugin
 from dewi_core.optioncontext import OptionContext
 from dewi_realtime_sync.app import LocalSyncApp, SyncOverSshApp, SyncOverKubernetesApp
+from dewi_realtime_sync.filesync_data import FileSyncFlags
 from dewi_realtime_sync.loader import EntryListLoader
 
 
@@ -24,10 +25,19 @@ class SubCommand(Command):
 
     @staticmethod
     def register_sync_entries(c: OptionContext):
+        sync_flags=[]
+        for flag in FileSyncFlags:
+            sync_flags.append(f'{flag.value} ({flag.name})')
+
         c.add_option(
             '-e', '--entry', required=True, multiple=True,
-            help='A file sync entry describing what to synchronize in format'
-                 ' source;target;permissions;owner;group;flags'
+            help=('A file sync entry describing what to synchronize in format'
+                 ' source;target;permissions;owner;group;flags.'
+                  ' The "target" is optional, by default it is the same as source.'
+                  ' When only source (and target) are set, it behaves as: if the source ends with "/",'
+                  ' then the directory is recursively copied. If it does not ends with "/", it is a file,'
+                  ' copied as-is.'
+                  ' Flags: ') + ', '.join(sync_flags)
         )
 
         c.add_option(
