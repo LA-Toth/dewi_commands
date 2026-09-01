@@ -5,10 +5,17 @@ from dewi_dataclass.node import Node
 
 
 class Filesystem(Node):
+    total: int | None
+    used: int | None
+    free: int | None
+    usage_percent: int | None
+    fs_type: str | None
+    mount_path: str | None
+
     def __init__(self):
-        self.total: int = None
-        self.used: int = None
-        self.free: int = None
-        self.usage_percent: int = None
-        self.fs_type: str = None
-        self.mount_path: str = None
+        self.total = None
+        self.used = None
+        self.free = None
+        self.usage_percent = None
+        self.fs_type = None
+        self.mount_path = None

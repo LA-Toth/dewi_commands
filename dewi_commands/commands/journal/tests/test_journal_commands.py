@@ -33,6 +33,20 @@ class SubCommandTest(dewi_core.testcase.TestCase):
         with open(self._tmpfile, 'wt', encoding='UTF-8') as f:
             f.write(content)
 
+    def _path(self, name: str) -> str:
+        return os.path.join(self._tmpdir.name, name)
+
+    def _make_journal_dir(self, name: str) -> str:
+        path = self._path(name)
+        os.makedirs(path, exist_ok=True)
+        return path
+
+    def _make_template(self, name: str) -> str:
+        path = self._path(name)
+        with open(path, 'wt', encoding='UTF-8') as f:
+            f.write('# {{date}}\n')
+        return path
+
     def test_register_arguments_requires_options_without_config(self):
         c = _FakeOptionContext()
         SubCommand.register_arguments(c)
@@ -44,8 +58,8 @@ class SubCommandTest(dewi_core.testcase.TestCase):
     def test_register_arguments_makes_options_optional_with_config(self):
         self._write_config(
             '[journal]\n'
-            'directory=/tmp/journal\n'
-            'daily-note-template-file=/tmp/template.txt\n'
+            f'directory={self._path("journal")}\n'
+            f'daily-note-template-file={self._path("template.txt")}\n'
         )
         c = _FakeOptionContext()
         SubCommand.register_arguments(c)
@@ -54,32 +68,36 @@ class SubCommandTest(dewi_core.testcase.TestCase):
         self.assert_false(c.options[1][1]['required'])
 
     def test_run_uses_config_values_as_defaults(self):
+        journal_dir = self._make_journal_dir('journal')
+        template = self._make_template('template.txt')
         self._write_config(
             '[journal]\n'
-            'directory=/tmp/journal\n'
-            'daily-note-template-file=/tmp/template.txt\n'
+            f'directory={journal_dir}\n'
+            f'daily-note-template-file={template}\n'
         )
         cmd = NewCommand()
         ctx = SimpleNamespace(args=SimpleNamespace(journal_dir=None, template_file=None))
 
         cmd.run(ctx)
 
-        self.assert_equal('/tmp/journal', cmd.journal_dir)
-        self.assert_equal('/tmp/template.txt', cmd.daily_note_template_file)
+        self.assert_equal(journal_dir, cmd.journal_dir)
+        self.assert_equal(template, cmd.daily_note_template_file)
 
     def test_run_overrides_config_values_with_options(self):
         self._write_config(
             '[journal]\n'
-            'directory=/tmp/journal\n'
-            'daily-note-template-file=/tmp/template.txt\n'
+            f'directory={self._make_journal_dir("journal")}\n'
+            f'daily-note-template-file={self._make_template("template.txt")}\n'
         )
+        override_dir = self._make_journal_dir('override_journal')
+        override_template = self._make_template('override_template.txt')
         cmd = NewCommand()
         ctx = SimpleNamespace(args=SimpleNamespace(
-            journal_dir='/override/journal',
-            template_file='/override/template.txt'
+            journal_dir=override_dir,
+            template_file=override_template
         ))
 
         cmd.run(ctx)
 
-        self.assert_equal('/override/journal', cmd.journal_dir)
-        self.assert_equal('/override/template.txt', cmd.daily_note_template_file)
+        self.assert_equal(override_dir, cmd.journal_dir)
+        self.assert_equal(override_template, cmd.daily_note_template_file)

@@ -45,16 +45,14 @@ setup(
     python_requires='>=3.10',
     packages=find_packages(exclude=['pylintcheckers', '*test*']),
     install_requires=[
-        'dewi_core >=5.0.0, <6',
+        'dewi_core >=6.1.0, <7',
         'dewi_module_framework>=2.0.1',
         'dewi_logparsers >=2.0.2, <3',
-        'dewi_utils >=3.0.0, <4',
+        'dewi_utils >=3.2.0, <4',
         'dewi_realtime_sync >=2.0.0, <3',
-        'dewi-dataclass >=1.0.0,<2',
+        'dewi-dataclass >=1.1.0,<2',
         'lxml',
-        'selenium',
         'sqlalchemy',
         'pyyaml',
-        'urllib3 <2',
     ]
 )

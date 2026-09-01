@@ -11,9 +11,12 @@ from ..common.base_module_ import BaseModule
 
 
 class BashEntry(Node):
+    timestamp: datetime.datetime | None
+    lines: list[str]
+
     def __init__(self):
-        self.timestamp: datetime.datetime = None
-        self.lines: list[str] = []
+        self.timestamp = None
+        self.lines = []
 
 
 class BashHistoryModule(BaseModule):

@@ -23,20 +23,6 @@ class ImageHandlerCommandsPlugin(Plugin):
         pass
 
 
-class DeprecatedCommandsPlugin(Plugin):
-    """Deprecated commands which are not needed anymore or doesn't work"""
-
-    def get_dependencies(self) -> collections.abc.Iterable[str]:
-        return {
-            'dewi_commands.commands.fetchcovidhu.FetchCovidHuPlugin',
-            'dewi_commands.commands.packt.PacktPlugin',
-            'dewi_commands.commands.ssh_ubuntu_windows.SshToUbuntuOnWindowsPlugin',
-        }
-
-    def load(self, c: Context):
-        pass
-
-
 class CommandsPlugin(Plugin):
     """Commands of DEWI"""
 

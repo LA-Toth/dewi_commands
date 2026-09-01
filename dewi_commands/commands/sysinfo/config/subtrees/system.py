@@ -7,7 +7,9 @@ from .hw import Hardware
 
 
 class System(Node):
+    hostname: str | None
+
     def __init__(self):
         self.hw = Hardware()
         self.filesystems = NodeList(Filesystem)
-        self.hostname: str = None
+        self.hostname = None

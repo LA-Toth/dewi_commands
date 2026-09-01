@@ -40,13 +40,20 @@ class Action(enum.Enum):
 
 @frozen
 class StockInputEntry(Node):
+    date: datetime.date | None
+    action: Action | None
+    name: str | None
+    price: float
+    share_price: float
+    share_amount: float
+
     def __init__(self):
-        self.date: datetime.date = None
-        self.action: Action = None
-        self.name: str = None
-        self.price: float = 0
-        self.share_price: float = 0
-        self.share_amount: float = 0
+        self.date = None
+        self.action = None
+        self.name = None
+        self.price = 0
+        self.share_price = 0
+        self.share_amount = 0
 
     @classmethod
     def create(cls, entry_date: str, action: str, stock: str, price: str, share_price: str, amount: str):
@@ -64,9 +71,12 @@ class StockInputEntry(Node):
 
 @frozen
 class SharePriceAmount(Node):
+    price: float
+    amount: float
+
     def __init__(self):
-        self.price: float = 0.0
-        self.amount: float = 0.0
+        self.price = 0.0
+        self.amount = 0.0
 
     @classmethod
     def create(cls, price: float, amount: float):
@@ -78,24 +88,38 @@ class SharePriceAmount(Node):
 
 @frozen
 class ShareState(Node):
+    name: str
+    amount: float
+    dividend_gain: float
+    share_gain: float
+    total_gain: float
+    amount_details: list[SharePriceAmount]
+
     def __init__(self):
-        self.name: str = ''
-        self.amount: float = 0
-        self.dividend_gain: float = 0.0
-        self.share_gain: float = 0.0
-        self.total_gain: float = 0.0
-        self.amount_details: list[SharePriceAmount] = []
+        self.name = ''
+        self.amount = 0
+        self.dividend_gain = 0.0
+        self.share_gain = 0.0
+        self.total_gain = 0.0
+        self.amount_details = []
 
 
 @frozen
 class State(Node):
+    input_entry: StockInputEntry | None
+    shares_state: dict[str, ShareState]
+    gain: float
+    loss: float
+    dividend: float
+    total: float
+
     def __init__(self):
-        self.input_entry: StockInputEntry = None
-        self.shares_state: dict[str, ShareState] = dict()
-        self.gain: float = 0.0
-        self.loss: float = 0.0
-        self.dividend: float = 0.0
-        self.total: float = 0.0
+        self.input_entry = None
+        self.shares_state = dict()
+        self.gain = 0.0
+        self.loss = 0.0
+        self.dividend = 0.0
+        self.total = 0.0
 
     def get_share_state(self, share_name: str):
         if share_name not in self.shares_state:

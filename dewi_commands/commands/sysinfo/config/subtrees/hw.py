@@ -5,28 +5,44 @@ from dewi_dataclass.node import Node
 
 
 class DmiDecode(Node):
+    manufacturer: str | None
+    product: str | None
+    serial: str | None
+    uuid: str | None
+
     def __init__(self):
-        self.manufacturer: str = None
-        self.product: str = None
-        self.serial: str = None
-        self.uuid: str = None
+        self.manufacturer = None
+        self.product = None
+        self.serial = None
+        self.uuid = None
 
 
 class RAID(Node):
+    controller: str | None
+    subsystem: str | None
+    driver: str | None
+
     def __init__(self):
-        self.controller: str = None
-        self.subsystem: str = None
-        self.driver: str = None
+        self.controller = None
+        self.subsystem = None
+        self.driver = None
 
 
 class Hardware(Node):
+    mem_size: int | None
+    mem_free: int | None
+    mem_mapped: int | None
+    pci: str | None
+    has_xvd: bool | None
+    disk_capacity: int | None
+
     def __init__(self):
-        self.mem_size: int = None
-        self.mem_free: int = None
-        self.mem_mapped: int = None
+        self.mem_size = None
+        self.mem_free = None
+        self.mem_mapped = None
         self.network_interfaces = dict()
         self.dmidecode = DmiDecode()
         self.raid = RAID()
-        self.pci: str = None
-        self.has_xvd: bool = None
-        self.disk_capacity: int = None
+        self.pci = None
+        self.has_xvd = None
+        self.disk_capacity = None

@@ -7,11 +7,14 @@ from ..constants import Mode
 
 
 class LowLevelDetails(Node):
+    oui: NetworkCardVendors | None
+    mode: Mode
+
     def __init__(self):
-        self.oui: NetworkCardVendors = None
+        self.oui = None
         self.dmidecode = dict()
 
-        self.mode: Mode = Mode.NO_MODE
+        self.mode = Mode.NO_MODE
 
     def __repr__(self) -> str:
         return str(self.__dict__)

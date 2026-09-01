@@ -7,11 +7,15 @@ from .system import System
 
 
 class MainNode(Node):
+    log_dir: str | None
+    munin_dir: str | None
+    processed: str
+
     def __init__(self):
-        self.log_dir: str = None
-        self.munin_dir: str = None
+        self.log_dir = None
+        self.munin_dir = None
 
         self.system = System()
         self.graphs = GraphResult()
 
-        self.processed: str = '1999-12-31T23:59:59+0000'
+        self.processed = '1999-12-31T23:59:59+0000'
