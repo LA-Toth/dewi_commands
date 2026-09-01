@@ -1,8 +1,40 @@
-3.1.0:
+3.2.0
+ - depend on dewi_utils 4: its threading module changed how a Job subclass is
+   written, so the previous pin, <4, would have refused the release carrying
+   the fixes for the pool hanging.
+ - packaging: setup.py replaced by pyproject.toml (PEP 517/518/621).
+   pyproject.toml has been the standard since setuptools 61, and
+   setup.py-as-configuration is legacy. The license is now the SPDX
+   expression per PEP 639, with COPYING declared via license-files, so the
+   redundant 'License ::' classifier is gone. zip_safe dropped: it only ever
+   applied to eggs. The sys.hexversion guard is gone too -- requires-python
+   does that, and does it before anything is downloaded.
+   Verified: the built wheel's file list is identical to the one setup.py
+   produced, for every package.
+ - remove the packt command: the Packt web UI changed years ago and the
+   command no longer works. Kept until now for historical reasons only.
+   'selenium' dropped from install_requires with it -- packt was its only
+   user.
+ - remove the ssh_ubuntu_windows command: it targeted WSL v1 and is dead.
+ - remove the fetchcovidhu command: the site it fetched from is gone.
+   'urllib3 <2' dropped from install_requires -- fetchcovidhu was its only
+   user, and the <2 pin existed for selenium.
+ - remove DeprecatedCommandsPlugin: with those three commands gone it would
+   have been empty, and nothing referenced it.
+ - data classes: the `self.x: T = value` style inside __init__ recorded no
+   annotation -- Python does not store annotations on attribute targets -- so
+   the members were invisible to `in`, to dewi_dataclass.fields(), and to
+   @frozen. The annotations moved to class level; __init__ keeps a plain
+   assignment. Where the default is None the annotation now says `T | None`,
+   which is what it always meant.
+ - Makefile: use pytest
+
+3.1.0
   - use type annotations w/o typing module, requires python 3.10+
   - filesync kubernetes app: add experimental parallel sync support
   - pin dependencies; selenium requires urllib3 < 2
   - add shell (bash) command & plugin (python3 -m dewi_commands.commands.shell)
+
 
 3.0.1
   - packt: use log_*() methods instead of internal logger
