@@ -56,7 +56,6 @@ class CommandsPlugin(Plugin):
             'dewi_commands.commands.license.LicensePlugin',
             'dewi_commands.commands.lithurgical.LithurgicalPlugin',
             'dewi_commands.commands.primes.PrimesPlugin',
-            'dewi_commands.commands.run_tests.RunTestsPlugin',
             'dewi_commands.commands.split_zorp_log.SplitZorpLogPlugin',
             'dewi_commands.commands.stripspace.StripSpacePlugin',
             'dewi_commands.commands.sysinfo.SysInfoPlugin',
