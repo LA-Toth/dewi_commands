@@ -17,7 +17,7 @@ check: cs tests features
 .PHONY: tests
 tests:
 	@echo Running Python unit tests
-	$(NOSE) -s $(NOSE_TEST_PATHS)
+	$(PYTEST) $(TEST_PATHS)
 
 .PHONY: cs
 cs: pylint pep8
