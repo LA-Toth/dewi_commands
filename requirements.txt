@@ -2,13 +2,11 @@ dewi_core
 dewi_module_framework
 dewi_logparsers
 dewi_utils
-selenium
+dewi_realtime_sync
+dewi-dataclass
+lxml
 sqlalchemy
 pyyaml
 
 setuptools
-lxml
 pytest
-
-# selenium requires 1.26
-urllib3 <2
