@@ -21,6 +21,12 @@ class TestVimArgumentConverter(dewi_core.testcase.TestCase):
         self.assert_equal(['path/to/file34.txt', '+42'], convert_to_vim_args(['path/to/file34.txt:42:12']))
         self.assert_equal(['path/to/file34.txt', '+42'], convert_to_vim_args(['path/to/file34.txt:42:12:']))
 
+    def test_that_a_bracket_is_not_a_line_number(self):
+        # '[' used to be a member of the character class of the line number,
+        # as it was written as [[0-9], which also warns of a nested set.
+        self.assert_equal(['path/to/file.txt:[42'], convert_to_vim_args(['path/to/file.txt:[42']))
+        self.assert_equal(['path/to/file.txt:['], convert_to_vim_args(['path/to/file.txt:[']))
+
     def test_multiple_args_are_prefixed_by_p_option(self):
         self.assert_equal(
             ['-p', 'path/to/file34.txt:34', 'path/to/file35.txt'],

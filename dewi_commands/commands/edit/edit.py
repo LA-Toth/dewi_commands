@@ -15,7 +15,7 @@ from dewi_core.optioncontext import OptionContext
 def convert_to_vim_args(args):
     result = []
     if len(args) == 1:
-        match = re.match(r'(.*?):([[0-9]+)(:[0-9]+)?:?$', args[0])
+        match = re.match(r'(.*?):([0-9]+)(:[0-9]+)?:?$', args[0])
         if match:
             result.append(match.group(1))
             result.append('+' + match.group(2))
